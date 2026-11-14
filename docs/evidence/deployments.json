@@ -1,0 +1,53 @@
+{
+  "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+  "teamId": "team_WIRikT3FV5NG9Xu6ol3D96gb",
+  "project": "unplan-demo",
+  "productionUrl": "https://unplan-demo.vercel.app",
+  "settings": {
+    "framework": "vite",
+    "nodeVersion": "22.x",
+    "rootDirectory": null,
+    "buildCommand": "npm run build",
+    "installCommand": "npm ci",
+    "outputDirectory": "dist"
+  },
+  "ssoProtection": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "automationSecretCount": 0,
+  "deployments": [
+    {
+      "id": "dpl_5YMXRNFQRWwzfQLDPr3zcbc79hTu",
+      "url": "unplan-demo-dep2908xb-haewonwons-projects.vercel.app",
+      "target": "production",
+      "environment": "production",
+      "createdAt": "2026-11-14T16:57:48.415Z",
+      "readyAt": "2026-11-14T16:58:46.018Z",
+      "readyState": "READY",
+      "aliases": []
+    },
+    {
+      "id": "dpl_9mYsy5tyo1XRD4y7oYe6rs59qhdj",
+      "url": "unplan-demo-j6cne4u14-haewonwons-projects.vercel.app",
+      "target": null,
+      "environment": "preview",
+      "createdAt": "2026-11-14T18:08:53.107Z",
+      "readyAt": "2026-11-14T18:09:59.025Z",
+      "readyState": "READY",
+      "aliases": []
+    },
+    {
+      "id": "dpl_GR15z3xdyry1LvMDZCQhSGmX2eaN",
+      "url": "unplan-demo-a2g5id738-haewonwons-projects.vercel.app",
+      "target": "production",
+      "environment": "production",
+      "createdAt": "2026-11-14T18:15:04.838Z",
+      "readyAt": "2026-11-14T18:15:54.481Z",
+      "readyState": "READY",
+      "aliases": [
+        "unplan-demo.vercel.app",
+        "unplan-demo-haewonwons-projects.vercel.app"
+      ]
+    }
+  ]
+}

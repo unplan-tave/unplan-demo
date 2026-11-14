@@ -1,0 +1,35 @@
+{
+  "url": "https://unplan-demo.vercel.app/",
+  "access": "anonymous-new-context",
+  "browser": "157.0.8103.52",
+  "entryContext": {
+    "text": "",
+    "referenceInstant": "2026-11-14T18:16:52.035Z",
+    "timeZone": "Asia/Seoul"
+  },
+  "checks": [
+    "example selection, incomplete/range/single date states, no automatic draft",
+    "titleless draft, blank optional time, editing, keyboard Enter/Tab/Escape and focus return",
+    "incomplete time stays blank, captured draft survives input edits, resolved time/title transfer",
+    "ambiguous/invalid/missing dates and unsupported guards disable action; source spans and derivations visible",
+    "invalid-context messages and disabled action, followed by recovery",
+    "rendered JSON matches installed parser; timezone changes update calendar date; edited draft stays independent and reopening uses current result",
+    "IME Escape keeps draft; clearing and deletion refresh all fields; closing a draft with disabled action returns focus to input",
+    "composition events and text updates preserve textarea focus (synthetic IME)",
+    "18000 UTF-16 units of repeated date input render and clear without stale results",
+    "375px and 320px layouts, no horizontal overflow, editable incomplete draft and keyboard dismissal",
+    "reference instant remains fixed while editing; explicit timezone context is applied",
+    "no browser console/page errors"
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "url": "https://unplan-demo.vercel.app/assets/index-CkvPcatl.css",
+      "status": 200
+    },
+    {
+      "url": "https://unplan-demo.vercel.app/assets/index-CrrSbZA3.js",
+      "status": 200
+    }
+  ]
+}

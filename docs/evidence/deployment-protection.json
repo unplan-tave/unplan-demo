@@ -1,0 +1,8 @@
+{
+  "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+  "ssoProtection": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "automationSecretsAfter": 0,
+  "revokedTestCredential": true
+}

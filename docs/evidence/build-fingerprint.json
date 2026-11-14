@@ -1,0 +1,24 @@
+{
+  "node": "22.20.0",
+  "npm": "10.9.3",
+  "independentCopy": "/tmp/unplan-release-isolated-zk1evJ/demo",
+  "hasSiblingParser": false,
+  "files": [
+    {
+      "path": "assets/index-CkvPcatl.css",
+      "sha256": "6165c7e570f64be0a8db6d69d870c9f81b58c50b2ea45ed452fcb8d5eb696e41"
+    },
+    {
+      "path": "assets/index-CrrSbZA3.js",
+      "sha256": "7451d1126ff9bb05e59d26e245d8aa0a47ff9a45b80c2439377fae041e298212"
+    },
+    {
+      "path": "favicon.svg",
+      "sha256": "964073ddc4cad9e48994324b777e58f2a00a3f6a66294567608d5292192643a6"
+    },
+    {
+      "path": "index.html",
+      "sha256": "4fe398a68ddd83ff32b9966d323bb37dafe76e53e56537bde3b76d13b9811477"
+    }
+  ]
+}

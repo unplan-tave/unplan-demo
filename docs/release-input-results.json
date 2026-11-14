@@ -1,0 +1,2293 @@
+{
+  "provenance": "2026-11-15 내부 작성. 구현 결과 실행 전 문서 정책으로 기대값 고정. 실제 사용자 자료 없음.",
+  "categories": {
+    "자연스러운 입력": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0,
+      "deferred": 0
+    },
+    "공백·조사·붙여쓰기": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0,
+      "deferred": 0
+    },
+    "입력 중·삭제": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0,
+      "deferred": 0
+    },
+    "모호함·충돌": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0,
+      "deferred": 0
+    },
+    "잘못된 값·context": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0,
+      "deferred": 0
+    },
+    "단어 내부·부분 문자열": {
+      "total": 8,
+      "pass": 6,
+      "fail": 0,
+      "deferred": 2
+    },
+    "반복·기간·지원 밖": {
+      "total": 8,
+      "pass": 4,
+      "fail": 0,
+      "deferred": 4
+    },
+    "이모지·줄바꿈·공백": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0,
+      "deferred": 0
+    },
+    "부정·질문·대화 의도": {
+      "total": 8,
+      "pass": 0,
+      "fail": 0,
+      "deferred": 8
+    },
+    "달력·시간대·DST": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0,
+      "deferred": 0
+    }
+  },
+  "records": [
+    {
+      "id": "K01",
+      "category": "자연스러운 입력",
+      "text": "치과 예약 모레 오전 10시",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [10, 0, "hour"],
+        "title": "치과 예약"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "치과 예약 모레 오전 10시"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 10,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "치과 예약",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K02",
+      "category": "자연스러운 입력",
+      "text": "프로젝트 회의 화요일 16:20",
+      "expected": {
+        "date": "2026-11-17",
+        "time": [16, 20, "minute"],
+        "title": "프로젝트 회의"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "프로젝트 회의 화요일 16:20"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-17"
+        },
+        "time": {
+          "hour": 16,
+          "minute": 20,
+          "precision": "minute"
+        },
+        "title": "프로젝트 회의",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K03",
+      "category": "자연스러운 입력",
+      "text": "오늘 18시 저녁 약속",
+      "expected": {
+        "date": "2026-11-14",
+        "time": [18, 0, "hour"],
+        "title": "저녁 약속"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "오늘 18시 저녁 약속"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-14"
+        },
+        "time": {
+          "hour": 18,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "저녁 약속",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K04",
+      "category": "자연스러운 입력",
+      "text": "금요일 자료 제출",
+      "expected": {
+        "date": "2026-11-20",
+        "time": "none",
+        "title": "자료 제출"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "금요일 자료 제출"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-20"
+        },
+        "time": "none",
+        "title": "자료 제출",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K05",
+      "category": "자연스러운 입력",
+      "text": "운동 일요일 오후 6시 반",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [18, 30, "minute"],
+        "title": "운동"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "운동 일요일 오후 6시 반"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 18,
+          "minute": 30,
+          "precision": "minute"
+        },
+        "title": "운동",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K06",
+      "category": "자연스러운 입력",
+      "text": "모레 07:40 출근",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [7, 40, "minute"],
+        "title": "출근"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 07:40 출근"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 7,
+          "minute": 40,
+          "precision": "minute"
+        },
+        "title": "출근",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K07",
+      "category": "자연스러운 입력",
+      "text": "다음 주 수요일 14시 면담",
+      "expected": {
+        "date": "2026-11-18",
+        "time": [14, 0, "hour"],
+        "title": "면담"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "다음 주 수요일 14시 면담"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-18"
+        },
+        "time": {
+          "hour": 14,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "면담",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K08",
+      "category": "자연스러운 입력",
+      "text": "점검 이번 주 목요일 오전 11시",
+      "expected": {
+        "date": "2026-11-12",
+        "time": [11, 0, "hour"],
+        "title": "점검"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "점검 이번 주 목요일 오전 11시"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-12"
+        },
+        "time": {
+          "hour": 11,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "점검",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K09",
+      "category": "공백·조사·붙여쓰기",
+      "text": "모레는 오전10시에는 검진",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [10, 0, "hour"],
+        "title": "검진"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레는 오전10시에는 검진"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 10,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "검진",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K10",
+      "category": "공백·조사·붙여쓰기",
+      "text": "다음주화요일오후2시반",
+      "expected": {
+        "date": "2026-11-17",
+        "time": [14, 30, "minute"],
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "다음주화요일오후2시반"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-17"
+        },
+        "time": {
+          "hour": 14,
+          "minute": 30,
+          "precision": "minute"
+        },
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K11",
+      "category": "공백·조사·붙여쓰기",
+      "text": "일요일에오전9시",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [9, 0, "hour"],
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "일요일에오전9시"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 9,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K12",
+      "category": "공백·조사·붙여쓰기",
+      "text": "내일에는 19시30분 산책",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [19, 30, "minute"],
+        "title": "산책"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일에는 19시30분 산책"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 19,
+          "minute": 30,
+          "precision": "minute"
+        },
+        "title": "산책",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K13",
+      "category": "공백·조사·붙여쓰기",
+      "text": "모레오후4시",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [16, 0, "hour"],
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레오후4시"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 16,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K14",
+      "category": "공백·조사·붙여쓰기",
+      "text": "목요일 은행 13 시 05 분",
+      "expected": {
+        "date": "2026-11-19",
+        "time": [13, 5, "minute"],
+        "title": "은행"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "목요일 은행 13 시 05 분"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-19"
+        },
+        "time": {
+          "hour": 13,
+          "minute": 5,
+          "precision": "minute"
+        },
+        "title": "은행",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K15",
+      "category": "공백·조사·붙여쓰기",
+      "text": "이번주일요일에 오후 12시 5분 식사",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [12, 5, "minute"],
+        "title": "식사"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "이번주일요일에 오후 12시 5분 식사"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 12,
+          "minute": 5,
+          "precision": "minute"
+        },
+        "title": "식사",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K16",
+      "category": "공백·조사·붙여쓰기",
+      "text": "내일은 0시에 점검",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [0, 0, "hour"],
+        "title": "점검"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일은 0시에 점검"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 0,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "점검",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K17",
+      "category": "입력 중·삭제",
+      "text": "내일 16:",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "incomplete",
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 16:"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "incomplete",
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K18",
+      "category": "입력 중·삭제",
+      "text": "내일 16:4",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "incomplete",
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 16:4"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "incomplete",
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K19",
+      "category": "입력 중·삭제",
+      "text": "내일 16:45",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [16, 45, "minute"],
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 16:45"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 16,
+          "minute": 45,
+          "precision": "minute"
+        },
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K20",
+      "category": "입력 중·삭제",
+      "text": "내일 오후 4시 3",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "incomplete",
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 오후 4시 3"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "incomplete",
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K21",
+      "category": "입력 중·삭제",
+      "text": "내일 오후 4",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "incomplete",
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 오후 4"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "incomplete",
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K22",
+      "category": "입력 중·삭제",
+      "text": "내일 오",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "none",
+        "title": "오"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 오"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "none",
+        "title": "오",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K23",
+      "category": "입력 중·삭제",
+      "text": "내",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "내"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "내",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K24",
+      "category": "입력 중·삭제",
+      "text": "모레 다음 주 목요일 오후",
+      "expected": {
+        "date": "ambiguous",
+        "time": "incomplete",
+        "title": null,
+        "dates": ["2026-11-16", "2026-11-19"]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 다음 주 목요일 오후"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "ambiguous",
+        "time": "incomplete",
+        "title": "none",
+        "diagnostics": ["ambiguous-date"],
+        "dates": [
+          {
+            "kind": "date",
+            "date": "2026-11-16"
+          },
+          {
+            "kind": "date",
+            "date": "2026-11-19"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K25",
+      "category": "모호함·충돌",
+      "text": "내일 8시 등교",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "ambiguous",
+        "title": "등교",
+        "hours": [8, 20]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 8시 등교"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "ambiguous",
+        "title": "등교",
+        "diagnostics": ["ambiguous-time"],
+        "times": [
+          {
+            "hour": 8,
+            "minute": 0,
+            "precision": "hour"
+          },
+          {
+            "hour": 20,
+            "minute": 0,
+            "precision": "hour"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K26",
+      "category": "모호함·충돌",
+      "text": "모레 12시 식사",
+      "expected": {
+        "date": "2026-11-16",
+        "time": "ambiguous",
+        "title": "식사",
+        "hours": [0, 12]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 12시 식사"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": "ambiguous",
+        "title": "식사",
+        "diagnostics": ["ambiguous-time"],
+        "times": [
+          {
+            "hour": 0,
+            "minute": 0,
+            "precision": "hour"
+          },
+          {
+            "hour": 12,
+            "minute": 0,
+            "precision": "hour"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K27",
+      "category": "모호함·충돌",
+      "text": "내일 모레 진료",
+      "expected": {
+        "date": "ambiguous",
+        "time": "none",
+        "title": "진료",
+        "dates": ["2026-11-15", "2026-11-16"]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 모레 진료"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "ambiguous",
+        "time": "none",
+        "title": "진료",
+        "diagnostics": ["ambiguous-date"],
+        "dates": [
+          {
+            "kind": "date",
+            "date": "2026-11-15"
+          },
+          {
+            "kind": "date",
+            "date": "2026-11-16"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K28",
+      "category": "모호함·충돌",
+      "text": "다음 주 목요일 다음 주",
+      "expected": {
+        "date": "ambiguous",
+        "time": "none",
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "다음 주 목요일 다음 주"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "ambiguous",
+        "time": "none",
+        "title": "none",
+        "diagnostics": ["ambiguous-date"],
+        "dates": [
+          {
+            "kind": "date",
+            "date": "2026-11-19"
+          },
+          {
+            "kind": "range",
+            "startDate": "2026-11-16",
+            "endDateExclusive": "2026-11-23",
+            "granularity": "week"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K29",
+      "category": "모호함·충돌",
+      "text": "모레 14시 14:00",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [14, 0, "minute"],
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 14시 14:00"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 14,
+          "minute": 0,
+          "precision": "minute"
+        },
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K30",
+      "category": "모호함·충돌",
+      "text": "내일 14시 15:00",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "ambiguous",
+        "title": null,
+        "hours": [14, 15]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 14시 15:00"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "ambiguous",
+        "title": "none",
+        "diagnostics": ["ambiguous-time"],
+        "times": [
+          {
+            "hour": 14,
+            "minute": 0,
+            "precision": "hour"
+          },
+          {
+            "hour": 15,
+            "minute": 0,
+            "precision": "minute"
+          }
+        ]
+      }
+    },
+    {
+      "id": "K31",
+      "category": "모호함·충돌",
+      "text": "모레 오전 9시 오후",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [9, 0, "hour"],
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 오전 9시 오후"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 9,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K32",
+      "category": "모호함·충돌",
+      "text": "일요일 내일 오후 12시",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [12, 0, "hour"],
+        "title": null
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "일요일 내일 오후 12시"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 12,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "none",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K33",
+      "category": "잘못된 값·context",
+      "text": "모레 오전 0시 검진",
+      "expected": {
+        "date": "2026-11-16",
+        "time": "invalid",
+        "title": "검진",
+        "code": "invalid-hour"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 오전 0시 검진"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": "invalid",
+        "title": "검진",
+        "diagnostics": ["invalid-hour"]
+      }
+    },
+    {
+      "id": "K34",
+      "category": "잘못된 값·context",
+      "text": "내일 18시60분 식사",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "invalid",
+        "title": "식사",
+        "code": "invalid-minute"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 18시60분 식사"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "invalid",
+        "title": "식사",
+        "diagnostics": ["invalid-minute"]
+      }
+    },
+    {
+      "id": "K35",
+      "category": "잘못된 값·context",
+      "text": "모레 25:01 점검",
+      "expected": {
+        "date": "2026-11-16",
+        "time": "invalid",
+        "title": "점검",
+        "code": "invalid-hour"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 25:01 점검"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": "invalid",
+        "title": "점검",
+        "diagnostics": ["invalid-hour"]
+      }
+    },
+    {
+      "id": "K36",
+      "category": "잘못된 값·context",
+      "text": "내일 09:007 수업",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "invalid",
+        "title": "수업",
+        "code": "invalid-minute"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 09:007 수업"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "invalid",
+        "title": "수업",
+        "diagnostics": ["invalid-minute"]
+      }
+    },
+    {
+      "id": "K37",
+      "category": "잘못된 값·context",
+      "text": "내일 14:00",
+      "expected": {
+        "date": "invalid-context",
+        "time": "none",
+        "title": null,
+        "errors": ["unsupported-time-zone"]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Mars/Olympus",
+        "text": "내일 14:00"
+      },
+      "verdict": "pass",
+      "actual": {
+        "status": "invalid-context",
+        "input": {
+          "referenceInstant": "2026-11-14T01:00:00Z",
+          "timeZone": "Mars/Olympus",
+          "text": "내일 14:00"
+        },
+        "errors": [
+          {
+            "code": "unsupported-time-zone",
+            "message": "이 실행 환경에서 지원하는 IANA 시간대를 입력해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "K38",
+      "category": "잘못된 값·context",
+      "text": "모레 14:00",
+      "expected": {
+        "date": "invalid-context",
+        "time": "none",
+        "title": null,
+        "errors": ["invalid-reference-instant"]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T10:00:00+09:60",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 14:00"
+      },
+      "verdict": "pass",
+      "actual": {
+        "status": "invalid-context",
+        "input": {
+          "referenceInstant": "2026-11-14T10:00:00+09:60",
+          "timeZone": "Asia/Seoul",
+          "text": "모레 14:00"
+        },
+        "errors": [
+          {
+            "code": "invalid-reference-instant",
+            "message": "기준 시각에 유효한 ISO 날짜와 Z 또는 숫자 offset이 필요합니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "K39",
+      "category": "잘못된 값·context",
+      "text": "금요일",
+      "expected": {
+        "date": "invalid-context",
+        "time": "none",
+        "title": null,
+        "errors": ["invalid-reference-instant"]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14",
+        "timeZone": "Asia/Seoul",
+        "text": "금요일"
+      },
+      "verdict": "pass",
+      "actual": {
+        "status": "invalid-context",
+        "input": {
+          "referenceInstant": "2026-11-14",
+          "timeZone": "Asia/Seoul",
+          "text": "금요일"
+        },
+        "errors": [
+          {
+            "code": "invalid-reference-instant",
+            "message": "기준 시각에 유효한 ISO 날짜와 Z 또는 숫자 offset이 필요합니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "K40",
+      "category": "잘못된 값·context",
+      "text": "모레",
+      "expected": {
+        "date": "invalid-context",
+        "time": "none",
+        "title": null,
+        "errors": ["unsupported-time-zone"]
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "-05:00",
+        "text": "모레"
+      },
+      "verdict": "pass",
+      "actual": {
+        "status": "invalid-context",
+        "input": {
+          "referenceInstant": "2026-11-14T01:00:00Z",
+          "timeZone": "-05:00",
+          "text": "모레"
+        },
+        "errors": [
+          {
+            "code": "unsupported-time-zone",
+            "message": "이 실행 환경에서 지원하는 IANA 시간대를 입력해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "K41",
+      "category": "단어 내부·부분 문자열",
+      "text": "오늘내일 일정",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "오늘내일 일정"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "오늘내일 일정"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "오늘내일 일정",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K42",
+      "category": "단어 내부·부분 문자열",
+      "text": "모레미 프로젝트",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "모레미 프로젝트"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레미 프로젝트"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "모레미 프로젝트",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K43",
+      "category": "단어 내부·부분 문자열",
+      "text": "다음주차 안내",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "다음주차 안내"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "다음주차 안내"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "다음주차 안내",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K44",
+      "category": "단어 내부·부분 문자열",
+      "text": "수요일정리 완료",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "수요일정리 완료"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "수요일정리 완료"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "수요일정리 완료",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K45",
+      "category": "단어 내부·부분 문자열",
+      "text": "모레오후4시작",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "모레오후4시작"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레오후4시작"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "모레오후4시작",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K46",
+      "category": "단어 내부·부분 문자열",
+      "text": "내일 3시간 회의",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "none",
+        "title": "3시간 회의",
+        "verdict": "deferred",
+        "note": "시간 단위 기간 표식은 현재 guard 보장 밖; 단일 날짜 버튼이 가능함"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 3시간 회의"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "none",
+        "title": "3시간 회의",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K47",
+      "category": "단어 내부·부분 문자열",
+      "text": "abc내일 보고서",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "abc내일 보고서"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "abc내일 보고서"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "abc내일 보고서",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K48",
+      "category": "단어 내부·부분 문자열",
+      "text": "내일 10:20:30 점검",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "none",
+        "title": "10:20:30 점검",
+        "verdict": "deferred",
+        "note": "초 표기는 인식하지 않음; 지원 날짜만 초안 가능"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 10:20:30 점검"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "none",
+        "title": "10:20:30 점검",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K49",
+      "category": "반복·기간·지원 밖",
+      "text": "모레 매일 운동",
+      "expected": {
+        "date": "2026-11-16",
+        "time": "none",
+        "title": "매일 운동",
+        "unsupported": true
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 매일 운동"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": "none",
+        "title": "매일 운동",
+        "diagnostics": ["unsupported-expression"]
+      }
+    },
+    {
+      "id": "K50",
+      "category": "반복·기간·지원 밖",
+      "text": "내일 매월 정산",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "none",
+        "title": "매월 정산",
+        "unsupported": true
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 매월 정산"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "none",
+        "title": "매월 정산",
+        "diagnostics": ["unsupported-expression"]
+      }
+    },
+    {
+      "id": "K51",
+      "category": "반복·기간·지원 밖",
+      "text": "오늘 45분 독서",
+      "expected": {
+        "date": "2026-11-14",
+        "time": "none",
+        "title": "45분 독서",
+        "unsupported": true
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "오늘 45분 독서"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-14"
+        },
+        "time": "none",
+        "title": "45분 독서",
+        "diagnostics": ["unsupported-expression"]
+      }
+    },
+    {
+      "id": "K52",
+      "category": "반복·기간·지원 밖",
+      "text": "모레 3시부터 5시까지 모임",
+      "expected": {
+        "date": "2026-11-16",
+        "time": "none",
+        "title": "3시부터 5시까지 모임",
+        "unsupported": true
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 3시부터 5시까지 모임"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": "none",
+        "title": "3시부터 5시까지 모임",
+        "diagnostics": ["unsupported-expression", "unsupported-expression"]
+      }
+    },
+    {
+      "id": "K53",
+      "category": "반복·기간·지원 밖",
+      "text": "2026년 12월 5일 여행",
+      "expected": {
+        "date": "none",
+        "time": "none",
+        "title": "2026년 12월 5일 여행",
+        "verdict": "deferred",
+        "note": "숫자 날짜 미지원"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "2026년 12월 5일 여행"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": "none",
+        "time": "none",
+        "title": "2026년 12월 5일 여행",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K54",
+      "category": "반복·기간·지원 밖",
+      "text": "다다음 주 금요일 회식",
+      "expected": {
+        "date": "2026-11-20",
+        "time": "none",
+        "title": "다다음 주 회식",
+        "verdict": "deferred",
+        "note": "다다음 주 미지원; 독립 금요일만 해석될 수 있음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "다다음 주 금요일 회식"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-20"
+        },
+        "time": "none",
+        "title": "다다음 주 회식",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K55",
+      "category": "반복·기간·지원 밖",
+      "text": "격주 화요일 회의",
+      "expected": {
+        "date": "2026-11-17",
+        "time": "none",
+        "title": "격주 회의",
+        "verdict": "deferred",
+        "note": "격주 표식 guard 보장 밖"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "격주 화요일 회의"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-17"
+        },
+        "time": "none",
+        "title": "격주 회의",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K56",
+      "category": "반복·기간·지원 밖",
+      "text": "내일 세 시 상담",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "none",
+        "title": "세 시 상담",
+        "verdict": "deferred",
+        "note": "한글 수사 미지원; 단일 날짜 초안 가능"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 세 시 상담"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "none",
+        "title": "세 시 상담",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K57",
+      "category": "이모지·줄바꿈·공백",
+      "text": "🎂 모레 오후 7시 축하",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [19, 0, "hour"],
+        "title": "🎂 축하"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "🎂 모레 오후 7시 축하"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 19,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "🎂 축하",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K58",
+      "category": "이모지·줄바꿈·공백",
+      "text": "회의\n내일\n18:25",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [18, 25, "minute"],
+        "title": "회의"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "회의\n내일\n18:25"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 18,
+          "minute": 25,
+          "precision": "minute"
+        },
+        "title": "회의",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K59",
+      "category": "이모지·줄바꿈·공백",
+      "text": "  준비   모레   오후4시  발표  ",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [16, 0, "hour"],
+        "title": "준비 발표"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "  준비   모레   오후4시  발표  "
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 16,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "준비 발표",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K60",
+      "category": "이모지·줄바꿈·공백",
+      "text": "🧑🏽‍💻 내일 22시 작업",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [22, 0, "hour"],
+        "title": "🧑🏽‍💻 작업"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "🧑🏽‍💻 내일 22시 작업"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 22,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "🧑🏽‍💻 작업",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K61",
+      "category": "이모지·줄바꿈·공백",
+      "text": "면담\t다음\t주\t목요일\t오전8시",
+      "expected": {
+        "date": "2026-11-19",
+        "time": [8, 0, "hour"],
+        "title": "면담"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "면담\t다음\t주\t목요일\t오전8시"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-19"
+        },
+        "time": {
+          "hour": 8,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "면담",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K62",
+      "category": "이모지·줄바꿈·공백",
+      "text": "내일\n오후\n5시\n반\n운동",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [17, 30, "minute"],
+        "title": "운동"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일\n오후\n5시\n반\n운동"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 17,
+          "minute": 30,
+          "precision": "minute"
+        },
+        "title": "운동",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K63",
+      "category": "이모지·줄바꿈·공백",
+      "text": "(모레) 20:10 산책",
+      "expected": {
+        "date": "2026-11-16",
+        "time": [20, 10, "minute"],
+        "title": "( ) 산책"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "(모레) 20:10 산책"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": {
+          "hour": 20,
+          "minute": 10,
+          "precision": "minute"
+        },
+        "title": "( ) 산책",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K64",
+      "category": "이모지·줄바꿈·공백",
+      "text": "내일　오후2시　점검",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [14, 0, "hour"],
+        "title": "점검"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일　오후2시　점검"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 14,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "점검",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K65",
+      "category": "부정·질문·대화 의도",
+      "text": "내일은 회의 안 해",
+      "expected": {
+        "date": "2026-11-15",
+        "time": "none",
+        "title": "회의 안 해",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일은 회의 안 해"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": "none",
+        "title": "회의 안 해",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K66",
+      "category": "부정·질문·대화 의도",
+      "text": "모레 약속 취소",
+      "expected": {
+        "date": "2026-11-16",
+        "time": "none",
+        "title": "약속 취소",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 약속 취소"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": "none",
+        "title": "약속 취소",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K67",
+      "category": "부정·질문·대화 의도",
+      "text": "내일 오후 2시 가능해?",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [14, 0, "hour"],
+        "title": "가능해?",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 오후 2시 가능해?"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 14,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "가능해?",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K68",
+      "category": "부정·질문·대화 의도",
+      "text": "오늘 회의는 없었어",
+      "expected": {
+        "date": "2026-11-14",
+        "time": "none",
+        "title": "회의는 없었어",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "오늘 회의는 없었어"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-14"
+        },
+        "time": "none",
+        "title": "회의는 없었어",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K69",
+      "category": "부정·질문·대화 의도",
+      "text": "금요일에 만나지 말자",
+      "expected": {
+        "date": "2026-11-20",
+        "time": "none",
+        "title": "만나지 말자",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "금요일에 만나지 말자"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-20"
+        },
+        "time": "none",
+        "title": "만나지 말자",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K70",
+      "category": "부정·질문·대화 의도",
+      "text": "모레는 어때?",
+      "expected": {
+        "date": "2026-11-16",
+        "time": "none",
+        "title": "어때?",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레는 어때?"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-16"
+        },
+        "time": "none",
+        "title": "어때?",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K71",
+      "category": "부정·질문·대화 의도",
+      "text": "내일 오후4시 회의 삭제해",
+      "expected": {
+        "date": "2026-11-15",
+        "time": [16, 0, "hour"],
+        "title": "회의 삭제해",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 오후4시 회의 삭제해"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-15"
+        },
+        "time": {
+          "hour": 16,
+          "minute": 0,
+          "precision": "hour"
+        },
+        "title": "회의 삭제해",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K72",
+      "category": "부정·질문·대화 의도",
+      "text": "오늘은 쉬고 싶어",
+      "expected": {
+        "date": "2026-11-14",
+        "time": "none",
+        "title": "쉬고 싶어",
+        "verdict": "deferred",
+        "note": "의도 분류 미지원; 문법 해석만 기록, 정답/실사용 정확도로 집계하지 않음"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T01:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "오늘은 쉬고 싶어"
+      },
+      "verdict": "deferred",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-14"
+        },
+        "time": "none",
+        "title": "쉬고 싶어",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K73",
+      "category": "달력·시간대·DST",
+      "text": "모레 점검",
+      "expected": {
+        "date": "2027-01-01",
+        "time": "none",
+        "title": "점검"
+      },
+      "input": {
+        "referenceInstant": "2026-12-30T12:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 점검"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2027-01-01"
+        },
+        "time": "none",
+        "title": "점검",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K74",
+      "category": "달력·시간대·DST",
+      "text": "오늘 02:30 작업",
+      "expected": {
+        "date": "2026-03-08",
+        "time": [2, 30, "minute"],
+        "title": "작업"
+      },
+      "input": {
+        "referenceInstant": "2026-03-08T06:30:00Z",
+        "timeZone": "America/New_York",
+        "text": "오늘 02:30 작업"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-03-08"
+        },
+        "time": {
+          "hour": 2,
+          "minute": 30,
+          "precision": "minute"
+        },
+        "title": "작업",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K75",
+      "category": "달력·시간대·DST",
+      "text": "오늘 01:30 작업",
+      "expected": {
+        "date": "2026-11-01",
+        "time": [1, 30, "minute"],
+        "title": "작업"
+      },
+      "input": {
+        "referenceInstant": "2026-11-01T06:30:00Z",
+        "timeZone": "America/New_York",
+        "text": "오늘 01:30 작업"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-01"
+        },
+        "time": {
+          "hour": 1,
+          "minute": 30,
+          "precision": "minute"
+        },
+        "title": "작업",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K76",
+      "category": "달력·시간대·DST",
+      "text": "모레 점검",
+      "expected": {
+        "date": "2024-03-01",
+        "time": "none",
+        "title": "점검"
+      },
+      "input": {
+        "referenceInstant": "2024-02-28T12:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 점검"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2024-03-01"
+        },
+        "time": "none",
+        "title": "점검",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K77",
+      "category": "달력·시간대·DST",
+      "text": "내일 검사",
+      "expected": {
+        "date": "2000-02-29",
+        "time": "none",
+        "title": "검사"
+      },
+      "input": {
+        "referenceInstant": "2000-02-28T12:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "내일 검사"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2000-02-29"
+        },
+        "time": "none",
+        "title": "검사",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K78",
+      "category": "달력·시간대·DST",
+      "text": "모레 검사",
+      "expected": {
+        "date": "2100-03-02",
+        "time": "none",
+        "title": "검사"
+      },
+      "input": {
+        "referenceInstant": "2100-02-28T12:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "모레 검사"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2100-03-02"
+        },
+        "time": "none",
+        "title": "검사",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K79",
+      "category": "달력·시간대·DST",
+      "text": "오늘 모임",
+      "expected": {
+        "date": "2026-11-13",
+        "time": "none",
+        "title": "모임"
+      },
+      "input": {
+        "referenceInstant": "2026-11-14T00:10:00Z",
+        "timeZone": "Pacific/Honolulu",
+        "text": "오늘 모임"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "date",
+          "date": "2026-11-13"
+        },
+        "time": "none",
+        "title": "모임",
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "K80",
+      "category": "달력·시간대·DST",
+      "text": "다음 주 회의",
+      "expected": {
+        "date": ["2026-11-16", "2026-11-23"],
+        "time": "none",
+        "title": "회의"
+      },
+      "input": {
+        "referenceInstant": "2026-11-15T12:00:00Z",
+        "timeZone": "Asia/Seoul",
+        "text": "다음 주 회의"
+      },
+      "verdict": "pass",
+      "actual": {
+        "date": {
+          "kind": "range",
+          "startDate": "2026-11-16",
+          "endDateExclusive": "2026-11-23",
+          "granularity": "week"
+        },
+        "time": "none",
+        "title": "회의",
+        "diagnostics": []
+      }
+    }
+  ]
+}
