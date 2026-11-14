@@ -12,7 +12,8 @@ body {
   line-height: var(--line-height);
 }
 button,
-textarea {
+textarea,
+input {
   font: inherit;
 }
 button,
@@ -21,6 +22,7 @@ summary {
   -webkit-tap-highlight-color: transparent;
 }
 button:focus-visible,
+input:focus-visible,
 a:focus-visible,
 summary:focus-visible {
   outline: 2px solid var(--color-accent);
@@ -253,7 +255,11 @@ dd {
   margin: 0;
 }
 .result-list dd {
-  color: var(--color-muted);
+  color: var(--color-text);
+  display: grid;
+  gap: var(--space-2);
+  text-align: right;
+  overflow-wrap: anywhere;
 }
 .panel-note {
   font-size: var(--text-xs);
@@ -295,6 +301,77 @@ dd {
 }
 .add-button:disabled {
   cursor: not-allowed;
+}
+.add-button:enabled {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+.result-panel,
+.action-panel {
+  min-width: 0;
+}
+.field-state,
+.result-list small {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+.state-resolved {
+  color: var(--color-accent);
+}
+.state-ambiguous,
+.state-invalid,
+.draft-warning {
+  color: #875319;
+}
+.recognition-details {
+  font-size: var(--text-xs);
+  margin-top: var(--space-5);
+  overflow-wrap: anywhere;
+}
+.recognition-details ul {
+  padding-left: var(--space-5);
+}
+.recognition-details h3 {
+  font-size: var(--text-xs);
+  margin: var(--space-4) 0 var(--space-2);
+}
+.source-preview {
+  white-space: pre-wrap;
+  margin-top: var(--space-3);
+}
+mark {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+.draft-editor {
+  border-top: var(--border);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  font-size: var(--text-sm);
+}
+.draft-editor h3 {
+  margin: 0;
+}
+.draft-editor label,
+.context-fields label {
+  display: block;
+  margin: var(--space-4) 0 var(--space-2);
+}
+input {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--color-input);
+  color: var(--color-text);
+}
+.draft-warning {
+  margin-top: var(--space-4);
+}
+.draft-editor button {
+  margin-top: var(--space-4);
 }
 .action-panel > .panel-note {
   text-align: center;
