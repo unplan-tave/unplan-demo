@@ -1,5 +1,8 @@
 # 초기 세팅 검증 기록
 
+이 문서는 alpha.0 초기 세팅 당시의 과거 기록이다. 현재 실제 파서 연결·초안과 검증은
+[MVP-VERIFICATION.md](MVP-VERIFICATION.md)를 기준으로 한다.
+
 2026-11-14 (Asia/Seoul), Node 22.20.0 / npm 10.9.3 기준.
 
 - `npm ci`: 통과.

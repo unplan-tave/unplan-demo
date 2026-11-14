@@ -1,12 +1,17 @@
 # Unplan Demo
 
-Unplan 한국어 일정 파서의 계약과 향후 실제 동작을 확인하기 위한 Vite + React +
+Unplan 한국어 일정 파서의 계약과 실제 동작을 확인하기 위한 Vite + React +
 TypeScript 정적 웹이다. 완성된 챗봇은 이번 범위에 포함하지 않는다.
 
-**현재 파서는 미구현이다.** 화면은 입력창, 미구현 결과 영역, 비활성 제안 버튼, 공개
-타입과 패키지 연결 확인용 개발 정보만 제공한다. 예시 버튼은 원문만 채운다. 분석 결과를
-만들거나 입력을 서버로 전송·저장하지 않는다. 기준 시각은 페이지 진입 시 고정하고
-시간대는 브라우저에서 읽는다. 개발 정보의 객체는 파서 입력이며 결과가 아니다.
+**한국어 일정 파서 MVP가 연결되어 있다.** 입력이 바뀌면 공개 패키지의 실제
+`parseSchedule`이 전체 문자열을 분석한다. 날짜·시간·제목의 상태, 인식 위치, diagnostics,
+추론 근거를 확인하고 정책에 맞으면 편집 가능한 초안을 연다. 입력은 서버로 보내지 않으며
+실제 일정도 저장하지 않는다. 기준 시각은 페이지 진입 시 고정하고 시간대는 브라우저에서
+읽는다. 개발 정보에서 context를 편집해 invalid-context도 확인할 수 있다.
+
+단일 날짜는 제목이 없어도 초안을 연다. 미완성 시간은 비워 두고 원문을 안내한다.
+주간 범위·미확정 날짜·모호/잘못된 시간·unsupported 경고는 추가를 보류한다.
+초안은 입력 변화와 독립적이며 제목·날짜·시간을 편집하고 닫을 수 있다.
 
 ## 실행
 
@@ -68,6 +73,20 @@ Vercel 프로젝트의 Root Directory는 이 레포 루트, Node는 지원되는
 정식 게시 후에는 parser의 정확한 버전으로 교체하고 lockfile을 갱신한다.
 Vercel 로그인·프로젝트 생성·환경변수·실제 배포는 이번에 수행하지 않았다.
 
-스타일 토큰은 `src/tokens.css`, 화면은 `src/App.tsx`다. 다음 구현에서는 실제 parser의
-결과를 렌더링하고, 날짜만 있어도 제목 입력이 가능한 초안으로 이어지는 액션을 연결한다.
-실제 일정 저장은 입력 변경과 분리한다. 이번 세팅에서는 Git 커밋·푸시·PR을 만들지 않는다.
+스타일 토큰은 `src/tokens.css`, 화면 조립은 `src/App.tsx`, 결과 표시는
+`src/ParseResultView.tsx`, 소비자 액션 정책은 `src/draft-policy.ts`, 초안은
+`src/DraftAction.tsx`다. 파서 로직과 계약 타입은 복사하지 않는다.
+
+## 브라우저 확인
+
+```sh
+# 별도 터미널에서 npm run dev 실행 후
+npx playwright install chromium
+npm run test:browser
+# 기존 Chrome 사용 시: BROWSER_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' npm run test:browser
+```
+
+입력·예시·상태·버튼, 제목 없는/미완성 시간 초안, context 오류, 키보드와 375px 화면을
+검증하고 `artifacts/`에 스크린샷·결과를 남긴다. 실제 검증 기록은
+[MVP-VERIFICATION.md](MVP-VERIFICATION.md)에 있다.
+Expo SDK 56/Hermes와 Vercel 실행은 검증하지 않았다. 게시·배포·커밋·푸시·PR은 수행하지 않는다.
