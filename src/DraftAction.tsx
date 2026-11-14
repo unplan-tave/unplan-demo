@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { RefObject } from 'react';
 import type { InvalidContextResult, ParseResult } from '@unplan-tave/parser';
 import { draftAction } from './draft-policy';
 import type { Draft } from './draft-policy';
@@ -20,7 +21,12 @@ function DraftEditor({
       className="draft-editor"
       aria-label="일정 초안"
       onKeyDown={(event) => {
-        if (event.key === 'Escape') onClose();
+        if (
+          event.key === 'Escape' &&
+          !event.nativeEvent.isComposing &&
+          event.nativeEvent.keyCode !== 229
+        )
+          onClose();
       }}
     >
       <h3>일정 초안</h3>
@@ -68,18 +74,21 @@ function DraftEditor({
 
 export function DraftAction({
   result,
+  inputRef,
 }: {
   result: ParseResult | InvalidContextResult;
+  inputRef: RefObject<HTMLTextAreaElement | null>;
 }) {
   const [draft, setDraft] = useState<Draft | null>(null);
   const addRef = useRef<HTMLButtonElement>(null);
   const returnFocus = useRef(false);
   useEffect(() => {
     if (!draft && returnFocus.current) {
-      addRef.current?.focus();
+      if (addRef.current?.disabled) inputRef.current?.focus();
+      else addRef.current?.focus();
       returnFocus.current = false;
     }
-  }, [draft]);
+  }, [draft, inputRef]);
   const action = draftAction(result);
   return (
     <section className="action-panel" aria-labelledby="action-title">

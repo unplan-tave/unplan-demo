@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   INITIAL_POLICIES,
   PARSER_INFO,
@@ -21,6 +21,7 @@ const examples = [
 
 export function App() {
   const [text, setText] = useState('');
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   // The UI owns the clock. Typing does not update the reference instant.
   const [context, setContext] = useState<ParseContext>(() => ({
     referenceInstant: new Date().toISOString(),
@@ -74,6 +75,7 @@ export function App() {
           어떤 일을 계획하고 있나요?
         </label>
         <textarea
+          ref={inputRef}
           id="schedule-input"
           value={text}
           onChange={(event) => setText(event.target.value)}
@@ -101,7 +103,7 @@ export function App() {
       </section>
       <div className="output-grid">
         <ParseResultView result={result} />
-        <DraftAction result={result} />
+        <DraftAction result={result} inputRef={inputRef} />
       </div>
       <details className="contract-panel">
         <summary>
