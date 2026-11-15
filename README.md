@@ -95,3 +95,9 @@ Expo SDK 56/Hermes는 아직 검증하지 않았다. Vercel 배포 및 브라우
 최신 [릴리스 기록](docs/demo-release.md)을 기준으로 한다.
 
 `node scripts/verify-snapshot.mjs`는 manifest·lockfile·vendor integrity·런타임 export·빌드 해시를 대조한다.
+
+## Git 자동 배포
+
+[자동 배포 설정과 검증](docs/git-deployment.md)을 참고한다. `main`은 Production,
+다른 브랜치는 Preview이며 `vercel.json`의 `npm run check`를 빌드 단계에서 실행한다.
+파서 변경은 새 vendor 스냅샷을 데모에 반영해 함께 push해야 배포된다.
