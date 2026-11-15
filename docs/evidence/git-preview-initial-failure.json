@@ -1,0 +1,10 @@
+{
+  "id": "dpl_DkMaNB1u7VtsnNM4b3BJ4v8mCFGk",
+  "url": "https://unplan-demo-plltf05ir-haewonwons-projects.vercel.app",
+  "state": "ERROR",
+  "source": "git",
+  "commit": "304a3c3dc867935ed8e78f42bd12d9ed05cd6687",
+  "branch": "codex/git-auto-deploy",
+  "observedFailure": "npm run check: Prettier warns about vercel.json in Vercel remote checkout; typecheck and ESLint passed",
+  "productionChanged": false
+}

@@ -17,7 +17,9 @@
 `vercel.json`을 배포 설정의 기준으로 사용한다. Root Directory는 레포 루트,
 Node는 22.x, 설치는 `npm ci`, 빌드는 `npm run check`, 출력은 `dist`다.
 `npm run check`에서 strict TypeScript·ESLint·Prettier를 통과한 뒤 Vite로 빌드한다.
-빌드 실패 시 성공한 기존 Production이 유지된다.
+빌드 실패 시 성공한 기존 Production이 유지된다. 원격 빌드에서 플랫폼이 가공하는
+`vercel.json`은 전체 포맷 검사 대상에서 제외한다. 저장소의 원본 설정을 수정할 때는
+`npx prettier vercel.json --check --ignore-path /dev/null`로 별도 확인한다.
 
 파서 원본 저장소의 push만으로 데모를 갱신하지 않는다. parser를 수정했으면 해당
 레포를 검증하고 demo에서 `npm run parser:sync`, `npm run check`,
