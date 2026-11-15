@@ -1,0 +1,31 @@
+{
+  "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+  "teamId": "team_WIRikT3FV5NG9Xu6ol3D96gb",
+  "deployments": [
+    {
+      "id": "dpl_3b1AJ1hujbKkGK3d8PzvzcfLsDQZ",
+      "url": "https://unplan-demo-1f22k8jm6-haewonwons-projects.vercel.app",
+      "target": null,
+      "readyState": "READY",
+      "createdAt": 1794703644444,
+      "ready": 1794703709749,
+      "alias": [],
+      "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+      "builds": []
+    },
+    {
+      "id": "dpl_4RrLbm3UPfkh3jQtAPQuNHoC8evw",
+      "url": "https://unplan-demo-gwz8lscto-haewonwons-projects.vercel.app",
+      "target": "production",
+      "readyState": "READY",
+      "createdAt": 1794703777000,
+      "ready": 1794703837582,
+      "alias": [
+        "unplan-demo.vercel.app",
+        "unplan-demo-haewonwons-projects.vercel.app"
+      ],
+      "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+      "builds": []
+    }
+  ]
+}

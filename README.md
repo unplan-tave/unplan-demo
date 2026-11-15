@@ -3,18 +3,15 @@
 공유 데모: [unplan-demo.vercel.app](https://unplan-demo.vercel.app).
 배포 식별 정보와 검증 결과는 [릴리스 기록](docs/demo-release.md)에 있다.
 
-Unplan 한국어 일정 파서의 계약과 실제 동작을 확인하기 위한 Vite + React +
-TypeScript 정적 웹이다. 완성된 챗봇은 이번 범위에 포함하지 않는다.
+Unplan 한국어 일정 파서의 P0 대화 제안을 확인하는 Vite + React + TypeScript 정적 웹이다.
+메시지를 전송하면 공개 패키지의 실제 `parseSchedule`로 분석한다. 한 행동의 오전·오후
+후보 중 하나를 골라 제목·날짜·시간 초안을 편집하고 닫거나 다시 선택할 수 있다.
+실제 저장·서버·DB·사용자 입력 수집은 없다.
 
-**한국어 일정 파서 MVP가 연결되어 있다.** 입력이 바뀌면 공개 패키지의 실제
-`parseSchedule`이 전체 문자열을 분석한다. 날짜·시간·제목의 상태, 인식 위치, diagnostics,
-추론 근거를 확인하고 정책에 맞으면 편집 가능한 초안을 연다. 입력은 서버로 보내지 않으며
-실제 일정도 저장하지 않는다. 기준 시각은 페이지 진입 시 고정하고 시간대는 브라우저에서
-읽는다. 개발 정보에서 context를 편집해 invalid-context도 확인할 수 있다.
-
-단일 날짜는 제목이 없어도 초안을 연다. 미완성 시간은 비워 두고 원문을 안내한다.
-주간 범위·미확정 날짜·모호/잘못된 시간·unsupported 경고는 추가를 보류한다.
-초안은 입력 변화와 독립적이며 제목·날짜·시간을 편집하고 닫을 수 있다.
+메시지마다 원문·기준 시각·시간대·후보를 고정한다. 기본 기준 시각은 전송할 때 생성하며
+개발 정보의 검증용 context는 이후 메시지에만 적용한다. 전송한 원문의 편집은 제공하지
+않는다. 근사 시각은 초안까지 보존하고 충돌·부정·질문·미지원 구문은 보류한다.
+제목을 정리할 수 없으면 원문 잔여를 보여 주고 편집해서 다시 보내도록 안내한다.
 
 ## 실행
 
@@ -78,7 +75,7 @@ Vercel 프로젝트의 Root Directory는 이 레포 루트, Node는 지원되는
 [docs/demo-release.md](docs/demo-release.md)를 참고한다.
 
 스타일 토큰은 `src/tokens.css`, 화면 조립은 `src/App.tsx`, 결과 표시는
-`src/ParseResultView.tsx`, 소비자 액션 정책은 `src/draft-policy.ts`, 초안은
+`src/ParseResultView.tsx`, 후보 선택은 `src/App.tsx`, 초안은
 `src/DraftAction.tsx`다. 파서 로직과 계약 타입은 복사하지 않는다.
 
 ## 브라우저 확인
@@ -90,8 +87,11 @@ npm run test:browser
 # 기존 Chrome 사용 시: BROWSER_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' npm run test:browser
 ```
 
-입력·예시·상태·버튼, 제목 없는/미완성 시간 초안, context 오류, 키보드와 375px 화면을
-검증하고 `artifacts/`에 스크린샷·결과를 남긴다. 실제 검증 기록은
-[MVP-VERIFICATION.md](MVP-VERIFICATION.md)에 있다.
+메시지 전송·후보 선택·재선택, 제목 없는/미완성 시간 초안, context 분리, IME·키보드와 320px/375px 화면을
+검증하고 `artifacts/`에 스크린샷·결과를 남긴다. 이전 MVP 검증은
+[MVP-VERIFICATION.md](MVP-VERIFICATION.md), 현재 대화형 제안 검증은
+[릴리스 기록](docs/demo-release.md)에 있다.
 Expo SDK 56/Hermes는 아직 검증하지 않았다. Vercel 배포 및 브라우저 검증 상태는
 최신 [릴리스 기록](docs/demo-release.md)을 기준으로 한다.
+
+`node scripts/verify-snapshot.mjs`는 manifest·lockfile·vendor integrity·런타임 export·빌드 해시를 대조한다.

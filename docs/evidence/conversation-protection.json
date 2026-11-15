@@ -1,0 +1,11 @@
+{
+  "ssoBefore": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "ssoAfter": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "bypassSecretsBefore": 0,
+  "bypassSecretsAfter": 0,
+  "temporarySecretsRevoked": 1
+}

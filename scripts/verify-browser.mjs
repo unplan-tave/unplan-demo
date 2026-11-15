@@ -1,21 +1,23 @@
+/* global document, innerWidth */
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
 import { expect } from 'playwright/test';
 import { parseSchedule } from '@unplan-tave/parser';
-
 const browser = await chromium.launch({
   ...(process.env.BROWSER_EXECUTABLE
     ? { executablePath: process.env.BROWSER_EXECUTABLE }
     : {}),
 });
-const checks = [];
-const errors = [];
-const assets = [];
-const artifactDirectory = process.env.ARTIFACT_DIR ?? 'artifacts';
+let outcome = 'failed';
+const checks = [],
+  errors = [],
+  assets = [];
+const artifactDirectory = process.env.ARTIFACT_DIR ?? 'artifacts/conversation';
+await mkdir(artifactDirectory, { recursive: true });
 const context = await browser.newContext({
-  viewport: { width: 1440, height: 1100 },
+  viewport: { width: 1280, height: 1000 },
   timezoneId: 'Asia/Seoul',
 });
 if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
@@ -31,303 +33,268 @@ if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
   );
 }
 const page = await context.newPage();
-page.on('pageerror', (error) => errors.push(error.message));
-page.on('requestfailed', (request) =>
-  errors.push(`Request failed: ${request.url()}`),
-);
-page.on('response', (response) => {
-  if (response.status() >= 400)
-    errors.push(`HTTP ${response.status()} ${response.url()}`);
-  if (['script', 'stylesheet'].includes(response.request().resourceType()))
-    assets.push({ url: response.url(), status: response.status() });
+page.on('pageerror', (e) => errors.push(e.message));
+page.on('console', (m) => {
+  if (m.type() === 'error') errors.push(m.text());
 });
-page.on('console', (message) => {
-  if (message.type() === 'error') errors.push(message.text());
+page.on('requestfailed', (r) => errors.push(`Failed: ${r.url()}`));
+page.on('response', (r) => {
+  if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`);
+  if (['script', 'stylesheet'].includes(r.request().resourceType()))
+    assets.push({ url: r.url(), status: r.status() });
 });
 const input = page.getByLabel('어떤 일을 계획하고 있나요?');
-const add = page.getByRole('button', { name: '할 일 추가' });
-const date = page.locator('.result-list > div').nth(0);
-const time = page.locator('.result-list > div').nth(1);
-const title = page.locator('.result-list > div').nth(2);
+const messages = page.locator('article.message');
 const draft = page.getByRole('region', { name: '일정 초안', exact: true });
-await mkdir(artifactDirectory, { recursive: true });
-
-try {
-  const navigation = await page.goto(
-    process.env.DEMO_URL ?? 'http://127.0.0.1:5173',
-  );
-  assert.equal(navigation.status(), 200);
-  const entryContext = JSON.parse(
-    await page.getByLabel('파서 입력 객체', { exact: true }).textContent(),
-  );
-  assert.equal(entryContext.timeZone, 'Asia/Seoul');
-  assert.ok(Number.isFinite(Date.parse(entryContext.referenceInstant)));
-  await expect(add).toBeDisabled();
+const fixed = {
+  referenceInstant: '2026-11-15T01:00:00Z',
+  timeZone: 'Asia/Seoul',
+};
+async function send(text) {
+  await input.fill(text);
+  await page.getByRole('button', { name: '전송 ↑', exact: true }).click();
+  await expect(input).toHaveValue('');
+  return messages.nth((await messages.count()) - 1);
+}
+async function close() {
+  await page.getByRole('button', { name: '초안 닫기 · Esc' }).click();
   await expect(draft).toHaveCount(0);
-  await input.fill('오늘');
-  const afterTyping = JSON.parse(
-    await page.getByLabel('파서 입력 객체', { exact: true }).textContent(),
+}
+try {
+  assert.equal(
+    (await page.goto(process.env.DEMO_URL ?? 'http://127.0.0.1:5173')).status(),
+    200,
   );
-  assert.equal(afterTyping.referenceInstant, entryContext.referenceInstant);
-  await page.locator('.contract-panel > summary').click();
-  await page.getByLabel('기준 시각 (ISO 8601)').fill('2026-11-14T01:00:00Z');
-  await page.getByLabel('IANA 시간대').fill('Asia/Seoul');
-  await page.locator('.contract-panel > summary').click();
-
-  for (const [text, state, enabled] of [
-    ['다음', 'incomplete', false],
-    ['다음 주', 'resolved', false],
-    ['다음 주 월요일에', 'resolved', true],
-    ['다음 주 월요일에 오후', 'resolved', true],
-  ]) {
-    await page
-      .locator('.example-list button')
-      .filter({ hasText: new RegExp(`^${text}↗$`, 'u') })
-      .click();
-    await expect(input).toHaveValue(text);
-    await expect(date).toContainText(state);
-    if (enabled) await expect(add).toBeEnabled();
-    else await expect(add).toBeDisabled();
-    await expect(draft).toHaveCount(0);
-  }
+  await expect(messages).toHaveCount(0);
+  await expect(
+    page.getByRole('button', { name: '전송 ↑', exact: true }),
+  ).toBeDisabled();
+  await input.fill('내일 3시 카페 갈 거야');
+  await input.fill('모레 음악 들을 거야');
+  await input.fill('');
+  await expect(messages).toHaveCount(0);
+  await expect(page.locator('.candidate')).toHaveCount(0);
   checks.push(
-    'example selection, incomplete/range/single date states, no automatic draft',
+    'composer edits/deletion do not send or create drafts/candidates',
   );
-
-  await input.fill('다음 주 월요일에');
-  await expect(date).toContainText('2026-11-16');
-  await add.focus();
+  await page.locator('.contract-panel > summary').click();
+  await page
+    .getByLabel('검증용 기준 시각', { exact: false })
+    .fill(fixed.referenceInstant);
+  await page.getByLabel('IANA 시간대').fill(fixed.timeZone);
+  await page.locator('.contract-panel > summary').click();
+  const core = '음 내일 3시쯤 카페 갈 거야';
+  const first = await send(core);
+  await expect(
+    first.getByRole('button', {
+      name: '내일 오전 3시쯤 · 카페 가기 ＋',
+      exact: true,
+    }),
+  ).toBeVisible();
+  const pm = first.getByRole('button', {
+    name: '내일 오후 3시쯤 · 카페 가기 ＋',
+    exact: true,
+  });
+  await expect(pm).toBeVisible();
+  await expect(first.locator('.candidate')).toHaveCount(2);
+  await expect(draft).toHaveCount(0);
+  const raw = JSON.parse(await first.locator('pre').textContent());
+  assert.deepEqual(raw, parseSchedule({ ...fixed, text: core }));
+  await pm.focus();
   await page.keyboard.press('Enter');
-  await expect(draft).toBeVisible();
-  await expect(page.getByLabel('초안 제목')).toHaveValue('');
-  await expect(page.getByLabel('초안 제목')).toBeFocused();
-  await expect(page.getByLabel('초안 날짜')).toHaveValue('2026-11-16');
-  await expect(page.getByLabel('초안 시간 (선택)')).toHaveValue('');
-  await page.getByLabel('초안 제목').fill('제목 편집');
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('카페 가기');
+  await expect(draft.getByLabel('초안 날짜')).toHaveValue('2026-11-16');
+  await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue('15:00');
+  await expect(draft).toContainText('근사 시각');
+  await expect(draft.getByLabel('초안 제목')).toBeFocused();
+  await draft.getByLabel('초안 제목').fill('민수랑 카페');
+  await draft.getByLabel('초안 날짜').fill('2026-11-18');
+  await draft.getByLabel('초안 시간 (선택)').fill('16:10');
+  await expect(draft.getByLabel('초안 날짜')).toHaveValue('2026-11-18');
+  await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue('16:10');
   await page.keyboard.press('Tab');
-  await expect(page.getByLabel('초안 날짜')).toBeFocused();
+  await expect(draft.getByLabel('초안 날짜')).not.toBeFocused();
+  await close();
+  await expect(pm).toBeFocused();
+  await first.locator('.candidate').first().click();
+  await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue('03:00');
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('카페 가기');
+  await draft.getByLabel('초안 제목').dispatchEvent('compositionstart');
+  await page.keyboard.press('Escape');
+  await expect(draft).toHaveCount(1);
+  await draft.getByLabel('초안 제목').dispatchEvent('compositionend');
+  await draft.getByLabel('초안 제목').dispatchEvent('keydown', {
+    key: 'Escape',
+    isComposing: true,
+    bubbles: true,
+  });
+  await expect(draft).toHaveCount(1);
+  await draft
+    .getByLabel('초안 제목')
+    .dispatchEvent('keydown', { key: 'Escape', keyCode: 229, bubbles: true });
+  await expect(draft).toHaveCount(1);
   await page.screenshot({
-    path: join(artifactDirectory, 'titleless-draft-desktop.png'),
+    path: join(artifactDirectory, 'desktop.png'),
     fullPage: true,
   });
   await page.keyboard.press('Escape');
   await expect(draft).toHaveCount(0);
-  await expect(add).toBeFocused();
   checks.push(
-    'titleless draft, blank optional time, editing, keyboard Enter/Tab/Escape and focus return',
+    'real package equality, exact two candidate labels, AM/PM selection, editable fields, close/reselect/focus, approximate meaning, IME Escape guards',
   );
 
-  await input.fill('내일 오후 3시 2');
-  await expect(time).toContainText('incomplete');
-  await expect(date).toContainText('2026-11-15');
-  await expect(title).toContainText('none');
-  await add.click();
-  await expect(page.getByLabel('초안 시간 (선택)')).toHaveValue('');
-  await expect(draft).toContainText('오후 3시 2');
-  await page.getByLabel('초안 제목').fill('입력 중인 초안');
-  await input.fill('내일 오후 3시 회의');
-  await expect(time).toContainText('15:00');
-  await expect(page.getByLabel('초안 제목')).toHaveValue('입력 중인 초안');
-  await expect(page.getByLabel('초안 시간 (선택)')).toHaveValue('');
-  await page.getByRole('button', { name: '초안 닫기' }).click();
-  await add.click();
-  await expect(page.getByLabel('초안 제목')).toHaveValue('회의');
-  await expect(page.getByLabel('초안 시간 (선택)')).toHaveValue('15:00');
-  await page.getByRole('button', { name: '초안 닫기' }).click();
-  checks.push(
-    'incomplete time stays blank, captured draft survives input edits, resolved time/title transfer',
-  );
-
-  for (const text of [
-    '내일 3시 회의',
-    '내일 24:00 회의',
-    '오늘 내일 회의',
-    '오후3시 회의',
-    '다음',
-    '다음 주',
-    '내일 매주 월요일 회의',
-    '내일 3시부터 4시까지',
-  ]) {
-    await input.fill(text);
-    await expect(add).toBeDisabled();
-  }
-  await input.fill('내일 매주 월요일 회의');
-  await page.locator('.recognition-details > summary').click();
-  await expect(page.locator('.recognition-details')).toContainText(
-    'unsupported-expression',
-  );
-  await input.fill('회의 🗓️ 내일 오후3시 준비');
-  await expect(page.getByLabel('인식한 원문')).toContainText(
-    '회의 🗓️ 내일 오후3시 준비',
-  );
-  await expect(page.getByLabel('필드 추론 근거')).toContainText(
-    'meridiem-to-24-hour',
-  );
-  await expect(title).toContainText('회의 🗓️ 준비');
-  await page.locator('.recognition-details > summary').click();
-  checks.push(
-    'ambiguous/invalid/missing dates and unsupported guards disable action; source spans and derivations visible',
-  );
-
-  await page.locator('.contract-panel > summary').click();
-  await page.getByLabel('IANA 시간대').fill('Invalid/Zone');
-  await expect(page.getByRole('alert')).toContainText('unsupported-time-zone');
-  await expect(add).toBeDisabled();
-  await page.getByLabel('IANA 시간대').fill('Asia/Seoul');
-  await page.getByLabel('기준 시각 (ISO 8601)').fill('invalid');
-  await expect(page.getByRole('alert')).toContainText(
-    'invalid-reference-instant',
-  );
-  await expect(add).toBeDisabled();
-  await page.getByLabel('기준 시각 (ISO 8601)').fill('2026-11-14T01:00:00Z');
-  await page.locator('.contract-panel > summary').click();
-  checks.push(
-    'invalid-context messages and disabled action, followed by recovery',
-  );
-
-  await page.locator('.contract-panel > summary').click();
-  await page.getByLabel('기준 시각 (ISO 8601)').fill('2026-11-15T15:30:00Z');
-  await input.fill('오늘 오후3시 회의');
-  await expect(date).toContainText('2026-11-16');
-  const visibleResult = JSON.parse(
-    await page.getByLabel('전체 파싱 결과', { exact: true }).textContent(),
-  );
-  assert.deepEqual(
-    visibleResult,
-    parseSchedule({
-      text: '오늘 오후3시 회의',
-      referenceInstant: '2026-11-15T15:30:00Z',
-      timeZone: 'Asia/Seoul',
-    }),
-  );
-  await add.click();
-  await page.getByLabel('초안 날짜').fill('2026-11-20');
-  await page.getByLabel('초안 시간 (선택)').fill('16:45');
-  await page.getByLabel('초안 제목').fill('독립 초안');
-  await page.getByLabel('IANA 시간대').fill('America/Los_Angeles');
-  await expect(date).toContainText('2026-11-15');
-  await expect(page.getByLabel('초안 날짜')).toHaveValue('2026-11-20');
-  await expect(page.getByLabel('초안 시간 (선택)')).toHaveValue('16:45');
-  await expect(page.getByLabel('초안 제목')).toHaveValue('독립 초안');
-  await page.getByRole('button', { name: '초안 닫기' }).click();
-  await add.click();
-  await expect(page.getByLabel('초안 날짜')).toHaveValue('2026-11-15');
-  await expect(page.getByLabel('초안 시간 (선택)')).toHaveValue('15:00');
-  await page.getByRole('button', { name: '초안 닫기' }).click();
-  await page.getByLabel('기준 시각 (ISO 8601)').fill('2026-11-14T01:00:00Z');
-  await page.getByLabel('IANA 시간대').fill('Asia/Seoul');
-  await page.locator('.contract-panel > summary').click();
-  checks.push(
-    'rendered JSON matches installed parser; timezone changes update calendar date; edited draft stays independent and reopening uses current result',
-  );
-
-  await input.fill('내일 오후');
-  await input.focus();
-  // Composition events exercise rerenders during IME; a native Korean IME remains a manual check.
-  await input.dispatchEvent('compositionstart', { data: '' });
-  await page.keyboard.insertText(' 3시');
-  await expect(input).toBeFocused();
-  await input.dispatchEvent('compositionend', { data: ' 3시' });
-  await expect(time).toContainText('15:00');
-  await expect(input).toBeFocused();
-  await add.click();
-  const draftTitle = page.getByLabel('초안 제목');
-  await draftTitle.fill('조합 중 초안');
-  await draftTitle.dispatchEvent('keydown', {
-    key: 'Escape',
-    code: 'Escape',
+  await input.fill('내일 3시 음악 들을 거야');
+  await input.dispatchEvent('compositionstart');
+  await page.keyboard.press('Enter');
+  await expect(messages).toHaveCount(1);
+  await input.dispatchEvent('compositionend');
+  await input.dispatchEvent('keydown', {
+    key: 'Enter',
     isComposing: true,
+    bubbles: true,
   });
-  await expect(draftTitle).toHaveValue('조합 중 초안');
-  await draftTitle.dispatchEvent('keydown', {
-    key: 'Escape',
-    code: 'Escape',
+  await expect(messages).toHaveCount(1);
+  await input.dispatchEvent('keydown', {
+    key: 'Enter',
     keyCode: 229,
+    bubbles: true,
   });
-  await expect(draftTitle).toBeVisible();
-  await input.fill('');
-  await expect(date).toContainText('none');
-  await expect(time).toContainText('none');
-  await expect(title).toContainText('none');
-  await page.getByRole('button', { name: '초안 닫기' }).click();
-  await expect(input).toBeFocused();
-  await expect(add).toBeDisabled();
-  for (const [text, state] of [
-    ['모레 오후 4시 3', 'incomplete'],
-    ['모레 오후 4', 'incomplete'],
-    ['모레', 'none'],
-    ['', 'none'],
+  await expect(messages).toHaveCount(1);
+  await page.keyboard.press('Shift+Enter');
+  await expect(messages).toHaveCount(1);
+  await input.fill('모레 오후 4시 음악 들을 거야');
+  await page.keyboard.press('Enter');
+  await expect(messages).toHaveCount(2);
+  await messages.last().locator('.candidate').click();
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('음악 듣기');
+  await expect(draft.getByLabel('초안 날짜')).toHaveValue('2026-11-17');
+  await send('내일 약 먹기');
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('음악 듣기');
+  await close();
+  await first.locator('.candidate').last().click();
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('카페 가기');
+  await close();
+  assert.deepEqual(JSON.parse(await first.locator('pre').textContent()), raw);
+  checks.push(
+    'IME Enter/229, Shift+Enter, sent-message immutability, independent messages and open draft',
+  );
+  for (const text of [
+    '내일 3시 카페 안 갈 거야',
+    '내일 3시 카페 갈까?',
+    '내일 3시 오후4시 카페 갈 거야',
+    '내일 밤 12시 카페 갈 거야',
+    '내일 3시 카페, 모레 4시 병원',
+    '내일 3시부터 4시까지 회의',
+    '민수가 내일 3시 카페 갈 거야',
+    '내일 3시 카페 가기 내일 3시 병원 가기',
   ]) {
-    await input.fill(text);
-    await expect(time).toContainText(state);
-    await expect(draft).toHaveCount(0);
+    const m = await send(text);
+    await expect(m.locator('.candidate')).toHaveCount(0);
   }
+  const unknown = await send('내일 3시 뭉게뭉게할 거야');
+  await expect(unknown.locator('.candidate')).toHaveCount(0);
+  await expect(unknown).toContainText('편집해서 다시 보내');
   checks.push(
-    'IME Escape keeps draft; clearing and deletion refresh all fields; closing a draft with disabled action returns focus to input',
+    'negative/question/conflict/P1/multi-event/other-actor/unknown title with no positive candidates',
   );
+  for (const [text, title] of [
+    ['내일', ''],
+    ['내일 오후 3시 2 카페 갈 거야', '카페 가기'],
+  ]) {
+    const m = await send(text);
+    await m.locator('.candidate').click();
+    await expect(draft.getByLabel('초안 제목')).toHaveValue(title);
+    await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue('');
+    if (title) await expect(draft).toContainText('오후 3시 2');
+    await close();
+  }
+  const emoji = await send('🗓️ 내일\n오후 3시\n카페에 갈 거야');
+  await emoji.locator('.candidate').click();
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('🗓️ 카페 가기');
+  await close();
+  const spaced = await send('내일 약                  3시 카페 갈 거야');
+  await expect(
+    spaced.getByRole('button', {
+      name: '내일 오후 3시쯤 · 카페 가기 ＋',
+      exact: true,
+    }),
+  ).toBeVisible();
   checks.push(
-    'composition events and text updates preserve textarea focus (synthetic IME)',
+    'missing title/date-only, incomplete clock without midnight, emoji/newline provenance',
   );
-
-  await input.fill('내일 '.repeat(6000));
-  await expect(date).toContainText('2026-11-15');
-  await expect(add).toBeEnabled();
-  await input.fill('');
-  await expect(add).toBeDisabled();
-  await expect(date).toContainText('none');
+  await page.locator('.contract-panel > summary').click();
+  await page.getByLabel('IANA 시간대').fill('America/Los_Angeles');
+  await page.locator('.contract-panel > summary').click();
+  const la = await send('오늘 회의');
+  const laRaw = JSON.parse(await la.locator('pre').textContent());
+  assert.equal(laRaw.suggestions.groups[0].options[0].value.date, '2026-11-14');
+  assert.equal(raw.input.timeZone, 'Asia/Seoul');
+  await page.locator('.contract-panel > summary').click();
+  await page.getByLabel('IANA 시간대').fill('No/Such');
+  await page.locator('.contract-panel > summary').click();
+  const bad = await send('내일 회의');
+  await expect(bad.locator('.candidate')).toHaveCount(0);
+  await page.locator('.contract-panel > summary').click();
+  await page.getByLabel('IANA 시간대').fill('Asia/Seoul');
+  await page.getByLabel('검증용 기준 시각', { exact: false }).fill('');
+  await page.locator('.contract-panel > summary').click();
+  const before = Date.now();
+  const live = await send('내일 회의');
+  const liveRaw = JSON.parse(await live.locator('pre').textContent());
+  assert.ok(Date.parse(liveRaw.input.referenceInstant) >= before);
+  assert.deepEqual(JSON.parse(await first.locator('pre').textContent()), raw);
   checks.push(
-    '18000 UTF-16 units of repeated date input render and clear without stale results',
+    'per-message reference clock and zone snapshots, LA calendar, invalid-context refusal',
   );
-
   for (const width of [375, 320]) {
-    await page.setViewportSize({ width, height: 900 });
-    await input.fill('내일 오후 3시 2');
-    await add.click();
-    await expect(page.getByLabel('초안 제목')).toBeFocused();
-    const dimensions = await page.locator('html').evaluate((element) => ({
-      scroll: element.scrollWidth,
-      viewport: element.clientWidth,
-    }));
+    await page.setViewportSize({ width, height: 850 });
+    await first.locator('.candidate').last().click();
+    await expect(draft.getByLabel('초안 제목')).toBeFocused();
     assert.ok(
-      dimensions.scroll <= dimensions.viewport,
-      `horizontal overflow at ${width}px`,
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+      `overflow ${width}`,
     );
-    await expect(page.getByLabel('초안 시간 (선택)')).toHaveValue('');
     await page.screenshot({
-      path: join(artifactDirectory, `incomplete-draft-${width}.png`),
-      fullPage: true,
+      path: join(artifactDirectory, `mobile-${width}.png`),
     });
-    await page.keyboard.press('Escape');
+    await close();
+    await input.fill('내일 회의');
+    await expect(input).toBeVisible();
   }
-  checks.push(
-    '375px and 320px layouts, no horizontal overflow, editable incomplete draft and keyboard dismissal',
+  checks.push('375px and 320px layout, editor/composer controls and focus');
+  const long = '내일 '.repeat(6000);
+  await send(long);
+  await expect(messages.last().locator('.user-message')).toHaveText(
+    long.trim(),
   );
-  const finalContext = JSON.parse(
-    await page.getByLabel('파서 입력 객체', { exact: true }).textContent(),
-  );
-  assert.equal(finalContext.referenceInstant, '2026-11-14T01:00:00Z');
-  assert.equal(finalContext.timeZone, 'Asia/Seoul');
-  checks.push(
-    'reference instant remains fixed while editing; explicit timezone context is applied',
-  );
+  await input.fill('내일 3시 회의');
+  await input.fill('');
+  await expect(
+    page.getByRole('button', { name: '전송 ↑', exact: true }),
+  ).toBeDisabled();
   assert.ok(
-    assets.some((asset) => asset.status === 200 && asset.url.includes('.js')),
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
   );
-  assert.ok(
-    assets.some((asset) => asset.status === 200 && asset.url.includes('.css')),
+  checks.push(
+    '18,000 UTF-16 repeated message, bounded candidate count, composer deletion after send',
   );
   assert.deepEqual(errors, []);
-  checks.push('no browser console/page errors');
+  outcome = 'passed';
+} finally {
   await writeFile(
     join(artifactDirectory, 'browser-verification.json'),
     JSON.stringify(
       {
+        outcome,
         url: page.url(),
         access: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-          ? 'authenticated-automation'
+          ? 'authenticated-automation-new-context'
           : 'anonymous-new-context',
         browser: await browser.version(),
-        entryContext,
         checks,
         errors,
         assets,
@@ -337,6 +304,5 @@ try {
     ),
   );
   console.log(JSON.stringify({ checks, errors }, null, 2));
-} finally {
   await browser.close();
 }

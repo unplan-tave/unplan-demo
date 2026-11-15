@@ -1,0 +1,14 @@
+{
+  "path": "/private/tmp/unplan-conversation-isolated-pQDpns/demo",
+  "siblingParser": false,
+  "npmCi": "pass",
+  "build": "pass",
+  "packageMatch": true,
+  "outputHashesMatch": true,
+  "buildHashes": {
+    "dist/assets/index-DewcMdTo.css": "e889a57e43952c320017af6bb0f5a328e0d1c072b3a5658a37fa49985ea3dcda",
+    "dist/assets/index-ZYHlgkcl.js": "8ec51ed384ff7f24856e762dc97be895cd7cc2d8eda465b8b40d6dbca7ca3a95",
+    "dist/favicon.svg": "964073ddc4cad9e48994324b777e58f2a00a3f6a66294567608d5292192643a6",
+    "dist/index.html": "eadc0aced7e9c1421835ad45ecdb3f6b5c2b307e86e63a5f157c54551a83f31b"
+  }
+}

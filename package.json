@@ -16,7 +16,7 @@
     "test:browser": "node scripts/verify-browser.mjs"
   },
   "dependencies": {
-    "@unplan-tave/parser": "file:vendor/unplan-tave-parser-0.1.0-alpha.2-6b778721b078.tgz",
+    "@unplan-tave/parser": "file:vendor/unplan-tave-parser-0.2.0-alpha.1-bbd1ec87cfaa.tgz",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },

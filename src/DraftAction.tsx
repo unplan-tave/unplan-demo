@@ -1,10 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import type { RefObject } from 'react';
-import type { InvalidContextResult, ParseResult } from '@unplan-tave/parser';
-import { draftAction } from './draft-policy';
-import type { Draft } from './draft-policy';
+import type { ParseContext } from '@unplan-tave/parser';
+export interface Draft {
+  messageId: number;
+  optionId: string;
+  original: string;
+  context: ParseContext;
+  title: string;
+  date: string;
+  time: string;
+  qualification: 'none' | 'unqualified' | 'approximate';
+  unfinishedTime: string;
+}
 
-function DraftEditor({
+export function DraftEditor({
   initial,
   onClose,
 }: {
@@ -12,6 +20,7 @@ function DraftEditor({
   onClose: () => void;
 }) {
   const [draft, setDraft] = useState(initial);
+  const composing = useRef(false);
   const titleRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     titleRef.current?.focus();
@@ -20,9 +29,16 @@ function DraftEditor({
     <section
       className="draft-editor"
       aria-label="일정 초안"
+      onCompositionStart={() => {
+        composing.current = true;
+      }}
+      onCompositionEnd={() => {
+        composing.current = false;
+      }}
       onKeyDown={(event) => {
         if (
           event.key === 'Escape' &&
+          !composing.current &&
           !event.nativeEvent.isComposing &&
           event.nativeEvent.keyCode !== 229
         )
@@ -33,6 +49,15 @@ function DraftEditor({
       <p className="panel-note">
         편집 중인 초안입니다. 실제 일정은 저장하지 않습니다.
       </p>
+      <p className="panel-note">
+        메시지 {initial.messageId} · {initial.original}
+      </p>
+      {initial.qualification === 'approximate' && (
+        <p className="draft-warning">
+          근사 시각입니다. 아래 시간은 기준값이며 정확한 시작 시각이나 ±범위를
+          뜻하지 않습니다.
+        </p>
+      )}
       {initial.unfinishedTime && (
         <p className="draft-warning">
           입력 중인 시간: {initial.unfinishedTime} · 확정되지 않은 시간은 비워
@@ -62,76 +87,12 @@ function DraftEditor({
         onChange={(event) => setDraft({ ...draft, time: event.target.value })}
       />
       <p className="panel-note">
-        시간이 비어 있으면 자정·종일 여부도 미정입니다. 원문 입력을 바꿔도 열린
+        시간이 비어 있으면 자정·종일 여부도 미정입니다. 다른 메시지를 보내도 이
         초안은 유지됩니다.
       </p>
       <button type="button" className="example" onClick={onClose}>
         초안 닫기 · Esc
       </button>
-    </section>
-  );
-}
-
-export function DraftAction({
-  result,
-  inputRef,
-}: {
-  result: ParseResult | InvalidContextResult;
-  inputRef: RefObject<HTMLTextAreaElement | null>;
-}) {
-  const [draft, setDraft] = useState<Draft | null>(null);
-  const addRef = useRef<HTMLButtonElement>(null);
-  const returnFocus = useRef(false);
-  useEffect(() => {
-    if (!draft && returnFocus.current) {
-      if (addRef.current?.disabled) inputRef.current?.focus();
-      else addRef.current?.focus();
-      returnFocus.current = false;
-    }
-  }, [draft, inputRef]);
-  const action = draftAction(result);
-  return (
-    <section className="action-panel" aria-labelledby="action-title">
-      <div className="section-heading">
-        <h2 id="action-title">
-          <span className="section-number">03</span> 제안 액션
-        </h2>
-      </div>
-      <div className="action-placeholder">
-        <span className="draft-icon" aria-hidden="true">
-          ＋
-        </span>
-        <p className="action-title">
-          {action.draft
-            ? '편집 가능한 초안을 열어 보세요'
-            : '일정 초안을 기다리고 있어요'}
-        </p>
-        <p>날짜·확정된 시간·제목 후보를 전달합니다.</p>
-      </div>
-      <button
-        ref={addRef}
-        type="button"
-        className="add-button"
-        disabled={!action.draft || !!draft}
-        aria-describedby="action-help"
-        onClick={() => setDraft(action.draft)}
-      >
-        할 일 추가 <span aria-hidden="true">↗</span>
-      </button>
-      <p id="action-help" className="panel-note">
-        {draft
-          ? '열린 초안을 편집하거나 닫은 뒤 새 초안을 열 수 있어요.'
-          : action.message}
-      </p>
-      {draft && (
-        <DraftEditor
-          initial={draft}
-          onClose={() => {
-            returnFocus.current = true;
-            setDraft(null);
-          }}
-        />
-      )}
     </section>
   );
 }

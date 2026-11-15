@@ -1,0 +1,37 @@
+{
+  "access": "anonymous-no-auth-headers",
+  "records": [
+    {
+      "file": "dist/assets/index-DewcMdTo.css",
+      "path": "/assets/index-DewcMdTo.css",
+      "status": 200,
+      "mime": "text/css; charset=utf-8",
+      "sha256": "e889a57e43952c320017af6bb0f5a328e0d1c072b3a5658a37fa49985ea3dcda",
+      "match": true
+    },
+    {
+      "file": "dist/assets/index-ZYHlgkcl.js",
+      "path": "/assets/index-ZYHlgkcl.js",
+      "status": 200,
+      "mime": "application/javascript; charset=utf-8",
+      "sha256": "8ec51ed384ff7f24856e762dc97be895cd7cc2d8eda465b8b40d6dbca7ca3a95",
+      "match": true
+    },
+    {
+      "file": "dist/favicon.svg",
+      "path": "/favicon.svg",
+      "status": 200,
+      "mime": "image/svg+xml",
+      "sha256": "964073ddc4cad9e48994324b777e58f2a00a3f6a66294567608d5292192643a6",
+      "match": true
+    },
+    {
+      "file": "dist/index.html",
+      "path": "/",
+      "status": 200,
+      "mime": "text/html; charset=utf-8",
+      "sha256": "eadc0aced7e9c1421835ad45ecdb3f6b5c2b307e86e63a5f157c54551a83f31b",
+      "match": true
+    }
+  ]
+}

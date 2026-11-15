@@ -1,204 +1,162 @@
-# Unplan 데모 릴리스 검증
+# Unplan 대화형 일정 제안 릴리스
 
-작성일: 2026-11-15 (Asia/Seoul). **Preview·Production 배포와 실제 화면 검증 완료.**
-공유 URL: [Unplan 데모](https://unplan-demo.vercel.app). 로그인 없는 새 Chrome context에서 입력·초안
-핵심 흐름과 정적 자산 로딩·콘솔을 확인했다.
+2026-11-15 (Asia/Seoul). P0의 실제 파서와 메시지별 후보·편집 초안을 연결했다.
+이전 MVP의 배포 기록은 [이력](releases/2026-11-15-mvp.md)에 보존했다.
 
-## 배포 상태와 식별 정보
+## 배포 식별 정보
 
-| 항목                | 상태                                                                               |
-| ------------------- | ---------------------------------------------------------------------------------- |
-| Production 공유 URL | [Unplan 데모](https://unplan-demo.vercel.app)                                      |
-| Production 배포 ID  | dpl_GR15z3xdyry1LvMDZCQhSGmX2eaN                                                   |
-| Production 고유 URL | https://unplan-demo-a2g5id738-haewonwons-projects.vercel.app                       |
-| Preview URL         | [Preview(인증 필요)](https://unplan-demo-j6cne4u14-haewonwons-projects.vercel.app) |
-| Preview 배포 ID     | dpl_9mYsy5tyo1XRD4y7oYe6rs59qhdj                                                   |
-| 준비 배포 ID        | dpl_5YMXRNFQRWwzfQLDPr3zcbc79hTu (Production 분류, 공유 도메인 연결 생략)          |
-| 프로젝트 ID         | prj_dEaAIakpLUnh6ub6GkBJFrZgeeif                                                   |
-| 팀                  | haewonwon's projects / haewonwons-projects / team_WIRikT3FV5NG9Xu6ol3D96gb (Hobby) |
-| 로그인 계정 / CLI   | haewonwon / 공식 CLI 65.16.0 (클라우드 빌드 CLI 65.14.0)                           |
-| 생성 사유           | 유일한 팀의 프로젝트 8개에서 unplan-demo가 없어 새로 생성                          |
+| 항목                | 값                                                                                   |
+| ------------------- | ------------------------------------------------------------------------------------ |
+| Production 공유 URL | [Unplan](https://unplan-demo.vercel.app)                                             |
+| Production 고유 URL | [Production 고유 주소](https://unplan-demo-gwz8lscto-haewonwons-projects.vercel.app) |
+| Production 배포 ID  | dpl_4RrLbm3UPfkh3jQtAPQuNHoC8evw                                                     |
+| Preview URL         | [Preview (인증 필요)](https://unplan-demo-1f22k8jm6-haewonwons-projects.vercel.app)  |
+| Preview 배포 ID     | dpl_3b1AJ1hujbKkGK3d8PzvzcfLsDQZ                                                     |
+| 기존 프로젝트       | haewonwons-projects/unplan-demo / prj_dEaAIakpLUnh6ub6GkBJFrZgeeif                   |
+| 팀                  | team_WIRikT3FV5NG9Xu6ol3D96gb                                                        |
+| CLI / 로컬 도구     | Vercel 65.16.0 / Node 22.20.0 / npm 10.9.3                                           |
 
-Vercel은 새 프로젝트의 첫 배포를 Production으로 강제하므로, 먼저
-`--prod --skip-domain`으로 공유 도메인 연결을 미룬 준비 배포를 만들었다. 이어서
-`--environment preview` 배포의 실제 브라우저 검사를 통과한 뒤 같은 파서·앱 코드로
-Production 배포를 완료했다. [첫 배포와 skip-domain 공식 설명](https://vercel.com/docs/cli/deploy#skip-domain).
+Preview 화면 검증 후 **그 Preview를 승격하여 동일한 소스·vendor 패키지로 Production을
+재배포**했다. Production은 로그인·저장 쿠키·인증 헤더 없는 새 Chrome context에서
+공유 주소로 별도 검사했다. 배포 전파 중 이전 JS를 받은 첫 검사는 실패로 확인했고,
+최종 JS·CSS·HTML 해시를 대조한 뒤 새 브라우저의 전체 검사를 다시 실행했다.
+CLI 성공이나 HTTP 200만으로 통과 처리하지 않았다.
+[배포 ID·상태·시각](evidence/conversation-deployments.json).
 
-원격 프로젝트를 CLI/API로 대조했다: 정적 Vite, Root Directory는 레포 루트(null/`.`),
-설치 `npm ci`, 빌드 `npm run build`, 출력 `dist`, Node 22.x. 로컬은 두
-`.nvmrc`의 정확한 Node 22.20.0 / npm 10.9.3을 사용했다. 클라우드 Node의 정확한
-patch는 빌드 로그에 나오지 않아 기록하지 않는다. vendor tarball을 포함한 원격 설치와
-타입 검사·빌드가 성공했다. 형제 폴더나 source alias, 서버·DB·환경변수는 필요 없다.
+기존 인증 보호 `all_except_custom_domains`를 유지했다. Preview는 인증이 필요하다.
+공식 `vercel curl`이 만든 검증용 임시 인증을 메모리에서만 브라우저에 전달했고,
+검사 후 폐기하여 secret 수가 다시 0개임을 확인했다. 첫 인증 시도는 로그인 화면으로
+이동해 실패했고, 인증 적용을 확인한 재시도의 앱 화면 검사만 통과로 기록한다.
+[보호 설정 대조](evidence/conversation-protection.json),
+[공식 인증 방식](https://vercel.com/docs/cli/curl).
+접근 보호 정책·플랜·커스텀 도메인은 변경하지 않았다.
 
-Vercel 인증 보호 `all_except_custom_domains`를 유지했다. Preview는 공개 URL이
-아니며 인증된 검증을 수행했다. 공식 `vercel curl`이 자동 생성한 Automation Bypass
-secret은 출력·파일 저장 없이 메모리에서만 테스트에 전달하고, Preview 검사 직후
-폐기했다. API 재조회로 secret 0개와 기존 인증 보호 유지 확인.
-[보호 설정 증거](evidence/deployment-protection.json). 유료 플랜·커스텀 도메인·보호
-정책 완화는 하지 않았다. Production 공유 도메인은 인증 정보 없는 새 브라우저로
-별도 확인했으며 로그인 화면 없이 접근할 수 있다.
+## 코드와 패키지
 
-## 코드·패키지 스냅샷
+- 파서 `@unplan-tave/parser@0.2.0-alpha.1`.
+- API `0.2.0-conversation.1`, 정책 `ko-schedule-v0.2-p0.1`.
+- vendor: `vendor/unplan-tave-parser-0.2.0-alpha.1-bbd1ec87cfaa.tgz`.
+- SHA-256: `bbd1ec87cfaaaed442c3566e1068ca3178c7f189759e20ed166efd92e9b90155`.
+- manifest·lockfile 경로, 설치 버전, vendor SHA-256/512·lockfile integrity,
+  실제 런타임 export를 대조했다. [패키지와 빌드 해시](evidence/conversation-snapshot.json).
+- npm pack은 dist JS·선언, docs, README, package.json의 28개 파일만 포함한다.
+  런타임 export는 `parseSchedule`, `PARSER_INFO`, `INITIAL_POLICIES` 세 개다.
+- 시작 시 parser에는 미추적 설계/검토 문서 3개가 있었고 demo는 깨끗했다.
+  기존 문서 내용을 보존하고 설계 이력 안내·포맷을 갱신했다. 이 기록은 기능 구현과
+  CLI 배포 당시의 검증이다. 이후 사용자 요청으로 Git 커밋·푸시와 자동 배포 연결을
+  진행하며 npm 게시는 하지 않는다. 파서 로직·타입을 데모에 복사하지 않았다.
 
-- 시작 Git 상태: 두 레포 모두 변경 없음. 기존 사용자 변경을 덮어쓰지 않았다.
-- parser 기준 HEAD: `e42bdec`, demo 기준 HEAD: `8763c3a`. 이번 수정은 커밋하지 않았다.
-- 패키지: `@unplan-tave/parser@0.1.0-alpha.2`.
-- API: `0.1.0-mvp.2`, 정책: `ko-schedule-v0-mvp.2`. `.2`는 연도 경계 검증을 명시한다.
-  한국어 지원 문법과 일반 날짜·시간 해석 기본값, 공개 타입과 세 런타임 export는 유지했다.
-- vendor: `vendor/unplan-tave-parser-0.1.0-alpha.2-6b778721b078.tgz`.
-- tarball SHA-256: `6b778721b078e8bf0d0c61a77081049ffa50b0474c1bcc869ef3e6305edf6f2a`.
-- `npm run parser:sync`로 설치했고 manifest·lockfile의 파일 경로, 설치 버전,
-  tarball의 SHA-512와 lockfile integrity 일치를 검사했다.
-- npm 게시, Git 커밋·푸시·PR, Expo 연결은 수행하지 않았다.
+## 구현한 규칙과 보류
 
-## 재현해서 수정한 결함
+기존 달력·IANA 시간대·값 검증을 재사용한다. `suggestions`가 한 절의 행동 제목과
+시간 대안을 묶으며, 기존 독립 date/time/title 필드는 인식·진단용으로 유지한다.
+특히 기존 title의 잔여 문자열을 정리된 행동 제목으로 표시하지 않는다.
 
-| 결함                                | 재현                                                                                                                 | 수정·회귀 확인                                                                                                                                                                        |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 반복 입력에서 동기 파서가 오래 멈춤 | `내일 ` 6,000회(UTF-16 18,000): 수정 전 약 46,154ms                                                                  | prefix 전체 변환, 반복 중복 검색·배열 복사, guard 전수 비교를 제거. 같은 측정 약 36ms. 긴 숫자 guard 재시도도 제한. 5초 제한 별도 프로세스로 반복·시간·guard·10만 자리 숫자 회귀 검사 |
-| 연도 경계에서 잘못된 날짜 확정      | `0001-01-01T00:00:00+09:00` / New York의 `오늘`을 서기 1년으로 반환. `9999-12-31` / UTC의 `내일`을 5자리 연도로 확정 | Intl era 확인. 현지 기준 날짜가 양의 4자리 범위 밖이면 invalid-context, 계산 날짜/주간 끝이 벗어나면 invalid-date. 독립 시간은 유지. API·정책·예시 문서와 버전 갱신                   |
-| 조합 중 Esc가 초안을 닫음           | 초안 제목에서 `isComposing: true`인 Escape → 초안 사라짐                                                             | 조합 중과 IME 호환 keyCode 229를 닫기에서 제외. 브라우저 회귀 검사                                                                                                                    |
-| 닫기 후 키보드 포커스 유실          | 초안을 연 뒤 원문을 비우고 닫기 → BODY에 포커스                                                                      | 추가 버튼이 비활성화되었으면 일정 입력으로 복귀. 활성 상태에서는 추가 버튼으로 복귀                                                                                                   |
+- 완성 시각의 쯤/정도와 시간 수식어 약을 근사 속성으로 보존한다. 긴 공백·줄바꿈도
+  검사한다. 수치 시각은 기준값이며 정확한 시작·±30분 범위·timestamp로 바꾸지 않는다.
+- 오전·오후 없는 1~12시는 두 대안, 12시는 00:00/12:00이다. 서로 다른 명시 시각의
+  충돌은 선택 후보로 나열하지 않고 확인한다. 같은 값은 병합한다.
+- 문두 독립 담화어와 가다/먹다/보다/읽다/듣다/만나다/걷다/쓰다의 등록 활용형,
+  검증한 행동 명사+하다로 제목을 정리한다. 장소별 정규식이나 예문 전체 비교는 없다.
+  동반자·대상·전달 대상·목적 정보는 보존하고 새로운 행동을 추론하지 않는다.
+- 부정·질문·취소/삭제·조회·불확실·희망·조건·인용·타인 주어를 보호한다.
+  안과/취소표 같은 명사는 문자열 일부만으로 부정/취소로 판단하지 않는다.
+  명시적인 `일정 추가해줄래?`는 생성 요청 예외지만 앞의 부정·조건은 계속 검사한다.
+- 미등록 행동은 verbatim 원문 잔여와 제목 편집 요청을 반환하며 후보를 만들지 않는다.
+  날짜만/제목 없음/미완성 시간은 빈 필드 초안을 허용하고 자정·종일로 채우지 않는다.
+- P1의 한글 수사·시간대 단어·정정·여러 행동·날짜 선택·목적절·복합 서술어·
+  순서·이중 부정은 확인/미지원 안내다. 기간·마감·반복·숫자 날짜·NFD도 지원하지 않는다.
 
-기존 일반 해석을 보존하는지 seed를 고정한 생성 조합 3,000개를 이전 구현과 비교했고
-차이가 없었다(연도 경계 수정 대상 제외, 버전 식별자 변경 전 비교).
-이 생성 조합도 실제 사용자 자료나 정확도 측정은 아니다.
+한 메시지의 단일 행동, 최대 두 후보만 지원한다. 새 메시지에 옛 날짜를 상속하지 않고
+서로 무관한 날짜·시간·제목을 교차 조합하지 않는다. title의 form·ruleIds·edits·
+UTF-16 sources와 option의 sources/derivations로 원문 근거를 추적한다.
 
-## 한국어 입력 검증
+## 기대값과 실제 실행
 
-**새로 작성한 내부 검증 자료 80개다. 실제 사용자 입력·피드백은 제공되지 않았다.**
-구현 결과를 실행하기 전에 parser 문서 정책으로 기대값을 고정했고, 기존 문서 예시
-39개와 별도 관리한다. 기대값 원본은 parser의 `tests/release-cases.json`, 실행기는
-`tests/release.test.mjs`다. [이번 실행의 입력·기대·실제 결과](release-input-results.json)를
-함께 보관한다. 모든 범주는 기본 context `2026-11-14T01:00:00Z` / `Asia/Seoul`을
-사용하며 별도 context는 각 레코드에 있다.
+64개 설계 예시는 **요구 예문 1개와 내부 작성 자료**다. 실제 사용자 수집 자료나
+실사용 정확도 검증이 아니다. 원본 기대값을 바꾸어 통과시키지 않았으며 실행 결과는
+[원문·기대·실제 결과](conversation-input-results.json)에 별도로 기록했다.
 
-| 범주                  | 전체 | 통과 | 실패 | 판단 보류 |
-| --------------------- | ---: | ---: | ---: | --------: |
-| 자연스러운 입력       |    8 |    8 |    0 |         0 |
-| 공백·조사·붙여쓰기    |    8 |    8 |    0 |         0 |
-| 입력 중·삭제          |    8 |    8 |    0 |         0 |
-| 모호함·충돌           |    8 |    8 |    0 |         0 |
-| 잘못된 값·context     |    8 |    8 |    0 |         0 |
-| 단어 내부·부분 문자열 |    8 |    6 |    0 |         2 |
-| 반복·기간·지원 밖     |    8 |    4 |    0 |         4 |
-| 이모지·줄바꿈·공백    |    8 |    8 |    0 |         0 |
-| 부정·질문·대화 의도   |    8 |    0 |    0 |         8 |
-| 달력·시간대·DST       |    8 |    8 |    0 |         0 |
-| 합계                  |   80 |   66 |    0 |        14 |
+| 분류              |  수 | 실행 결과                                        |
+| ----------------- | --: | ------------------------------------------------ |
+| P0 후보 제안      |  30 | 제목·형태·날짜·시간·근사·대안 관계 일치          |
+| P0 확인 보호      |  14 | 기대한 clarify와 이유 일치                       |
+| P0 제안 금지      |   9 | 기대한 no-offer와 이유 일치                      |
+| P0 제목 편집 요청 |   1 | verbatim 잔여 보존과 review-title 일치           |
+| P1 보류           |  10 | 미지원 확인 동작만 일치, 문법 지원으로 세지 않음 |
+| 실패              |   0 | 최종 실행 기준                                   |
 
-66건 중 **62건은 지원 문법의 해석·오류·모호함·경계 검증**, **4건은 미지원 표식을
-경고하고 추가를 보류해야 하는 guard 검증**이다. 미지원 문법을 해석한 성공으로 세지
-않는다. 14건은 미지원·의도 해석의 한계로 관찰만 기록했고 맞다고 판정하지 않았다.
-테스트 러너도 이 14건을 TODO로 구분한다. 실사용 정확도라는 수치를 산출하지 않는다.
-추가 리뷰에서 발견한 반복 성능·연도 경계 회귀는 이 80개와 별도 테스트다.
+즉 P0 54건의 기대 동작과 P1 10건의 안전한 보류를 구분한다. 제목 누락·미완성,
+단어 경계(음/음악, 약/약속, 안/안과), 동반자·대상 보존, 부정 반전 방지,
+명시 충돌, 이모지·줄바꿈·긴 반복·10만 자리 숫자·UTF-16 범위의 별도 회귀도 실행했다.
 
-## 실행한 검사와 증거
+## 실행한 검사
 
-- parser: `npm ci`, `npm test`(130 pass / 0 fail / 14 TODO), `npm run check`
-  (strict 타입·ESLint·Prettier·빌드), `npm pack --dry-run --json`, 실제 `npm pack` 통과.
-  tarball 23개 파일은 dist JS·선언, docs, README, package.json만 포함한다.
-  런타임 export는 `parseSchedule`, `PARSER_INFO`, `INITIAL_POLICIES`만 존재한다.
-- demo: `npm ci`, `npm run parser:sync`, `npm run check` 통과.
-- parser 형제 폴더 없는 `/tmp/unplan-isolated-sxUaaV/demo` 복사본의 `npm ci`와 빌드 통과.
-  최종 스냅샷도 `/tmp/unplan-release-isolated-zk1evJ/demo`에서 설치·빌드 통과.
-  최종 JS·CSS·HTML 파일의 SHA-256이 원본 빌드와 모두 같다.
-  [빌드 식별 정보](evidence/build-fingerprint.json).
-- Chrome 157.0.8103.52에서 실제 화면과 `npm run test:browser` 검증.
-  날짜만/제목 없음, 미완성 시간의 빈 시간 초안, 모호·오류·미지원 보류, 입력 삭제,
-  초안 제목·날짜·시간 편집과 닫기·재열기, 원문·context 수정 후 초안 독립성,
-  Enter/Tab/Escape 및 포커스, 320px/375px 가로 넘침 없음 확인.
-- 페이지 최초 기준 시각 고정과 브라우저 시간대 주입을 확인했고,
-  같은 instant의 Seoul/Los Angeles 날짜 차이와 실제 패키지/화면 JSON 일치를 검사했다.
-- **한글 IME는 합성 composition 이벤트와 키 이벤트를 검사했다.** 실제 macOS/iOS/Android
-  한글 입력기의 조합·후보 선택은 별도 수동 확인이 남아 있다.
-- 로컬 dev 증거: `artifacts/local/browser-verification.json`과 데스크톱·모바일 PNG.
-  검사 중 JS/CSS 로딩 성공, HTTP 실패·pageerror·console error 0건.
-- 설치 감사에서 개발 lint 의존성 계열 moderate 7건이 보고되었다. 코어 런타임 의존성은
-  없으며, 의존성 major 업그레이드는 이번 기능 수정에 섞지 않았다.
-- 최종 정적 빌드 `http://127.0.0.1:4174/`에서도 동일 브라우저 검사 12개 그룹 통과.
-  18,000자 반복 입력 후 삭제까지 확인. 오류 0건, JS/CSS 200.
-  [정적 빌드 브라우저 증거](evidence/browser-static.json), 스크린샷은 `artifacts/static/`.
-- Vercel Preview: 실제 배포 화면에서 같은 12개 검사 그룹 통과, 오류 0건.
-  인증 보호는 유지하고 테스트 동안만 메모리의 인증 헤더를 사용했다.
-  [Preview 증거](evidence/browser-preview.json), 스크린샷 `artifacts/preview/`.
-- Vercel Production: **인증 헤더·로그인 저장 정보 없는 새 브라우저 context**에서
-  12개 그룹 통과. 날짜/제목 없는 초안, 날짜·시간·제목 전달, 미완성 시간,
-  모호·오류·미지원 보류, 수정·삭제·초안 편집/재열기, 키보드·375px/320px,
-  긴 입력, context 적용을 재검증. pageerror·console error·HTTP 실패 0건.
-  [Production 증거](evidence/browser-production.json), 스크린샷 `artifacts/production/`.
-- Production의 HTML·JS·CSS·favicon을 별도의 인증 없는 HTTP 요청으로 확인했다.
-  모두 200, MIME 일치, SHA-256이 독립 빌드를 포함한 로컬 검증 산출물과 동일하다.
-  [자산 대조](evidence/production-assets.json).
-- [배포 ID·UTC 생성/완료 시각·설정](evidence/deployments.json). Production은
-  2026-11-15 새벽(Asia/Seoul) 배포이며, 공유 도메인은 공개이고 고유 배포 URL과
-  Preview에는 Vercel 인증 보호가 남아 있다.
+- 두 `.nvmrc`의 Node 22.20.0과 npm 10.9.3을 사용했다.
+- parser: `npm ci`, `npm test` **199 pass / 0 fail / 14 TODO**, `npm run check`
+  (strict 타입·ESLint·Prettier·빌드), `npm pack --dry-run --json`, 실제 pack 통과.
+  14 TODO는 이전 독립 필드 검증 자료의 범위 밖 관찰 사례이며 새 기능 성공으로 세지 않는다.
+- demo: `npm run parser:sync`, `npm ci`, `npm run check`,
+  `node scripts/verify-snapshot.mjs` 통과. 독립 manifest/lockfile/vendor를 유지한다.
+- 형제 parser 폴더 없는 임시 demo 복사본에서 `npm ci`와 build 통과.
+  패키지와 HTML·JS·CSS·favicon SHA-256이 원본 빌드와 일치했다.
+  [독립 설치 증거](evidence/conversation-isolated.json).
+- 실제 정적 빌드·Preview·Production에서 브라우저 검사 8개 그룹을 실행했다.
+  화면과 스크린샷을 확인했으며 최종 검사에서 pageerror·console error·HTTP 실패는 0건이다.
+  [정적 빌드](evidence/conversation-browser-static.json),
+  [Preview](evidence/conversation-browser-preview.json),
+  [Production](evidence/conversation-browser-production.json).
+- [Production 정적 자산 대조](evidence/conversation-production-assets.json)는 인증 없는
+  요청으로 로컬/독립 빌드의 해시·MIME·상태와 대조했다.
+- 검증 중 발견한 초안 닫기 후 포커스 경쟁을 layout effect로 수정했다. 제목 정리에서
+  목적어 을/를을 임의 삭제하지 않으며, 긴 공백의 약 수식어와 같은 시각의 근사 속성
+  병합, 연결어 없는 명사형 행동 나열의 보류를 회귀 검사했다. 긴 숫자에서 보호 정규식의 재시도 성능 문제도 수정했다.
 
-브라우저 검사 재실행(개발 서버 또는 정적 preview 서버가 먼저 실행되어 있어야 한다):
+## 배포 화면에서 확인한 흐름
 
-```sh
-BROWSER_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' \
-DEMO_URL=http://127.0.0.1:5174 ARTIFACT_DIR=artifacts/local npm run test:browser
-# 공개 Production 검사(인증 정보 없이)
-BROWSER_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' \
-DEMO_URL=https://unplan-demo.vercel.app ARTIFACT_DIR=artifacts/production npm run test:browser
-# 보호된 Preview는 공식 인증이 필요하다. secret을 URL·문서·소스에 넣지 않는다.
-```
+1. 입력 수정·전체 삭제만으로 메시지·후보·초안이 생기지 않는다. Enter/전송으로만 전송한다.
+2. `음 내일 3시쯤 카페 갈 거야` → 원문 표시와 두 후보:
+   `내일 오전 3시쯤 · 카페 가기 ＋`, `내일 오후 3시쯤 · 카페 가기 ＋`.
+3. 오후 선택 → 제목 카페 가기, 기준 context에서 2026-11-16, 기준 시간 15:00.
+   근사 안내를 유지한다. 오전 선택은 03:00이다. 입력만으로 두 일정을 추가하지 않는다.
+4. 제목·날짜·시간을 편집하고 닫기/Esc 후 다시 선택하면 선택 후보의 새 초안이 열린다.
+   초안 제목으로 포커스를 옮기고 닫으면 원래 후보 버튼으로 돌아온다.
+5. 다른 메시지와 개발 context를 보내도 이전 메시지의 원문·context·후보와 열린 초안은
+   섞이지 않는다. 전송 시각을 메시지마다 고정하며 전송한 원문의 편집은 제공하지 않는다.
+6. 부정·질문·충돌·P1·타인 주어에는 긍정 후보가 없다. 미등록 행동은 원문을 보여 주며
+   편집해서 다시 보내도록 요청한다. 날짜만/미완성 시간은 빈 시간 초안으로 이어진다.
+7. IME 조합 중 Enter/Esc와 keyCode 229를 합성 이벤트로 검사했다. Shift+Enter는 줄바꿈,
+   Tab·Enter·Escape와 포커스를 검사했다. 320px·375px에서 가로 넘침 없이 조작했다.
+8. 이모지·줄바꿈, 18,000 UTF-16 반복 메시지와 전송 후 입력 삭제를 확인했다.
 
-## 지원 범위와 알려진 제한
+증거 PNG는 `artifacts/conversation-static`, `artifacts/conversation-preview`,
+`artifacts/conversation-production`에 있다. 실제 macOS/iOS/Android 한글 입력기의
+조합·후보 선택을 사람이 직접 확인한 결과로 표현하지 않는다.
 
-오늘·내일·모레, 이번/다음 주와 요일, 단독 요일, 숫자 시·분·반, 오전·오후,
-H:mm/HH:mm 및 문서에 정한 경계·조사를 지원한다. 단독 1~12시는 모호함으로 남기고,
-주간 범위에서 날짜를 임의로 고르지 않는다. 날짜만으로 자정이나 종일을 채우지 않는다.
+## 알려진 제한과 실패 제보
 
-한 날짜가 확정되면 제목이 없어도 초안을 연다. 시간 incomplete도 날짜를 유지하고
-시간이 빈 초안을 열 수 있다. 시간 ambiguous/invalid, 미확정 날짜/주간 범위,
-unsupported warning, invalid-context에서는 추가를 보류한다. 열린 초안은 클릭 시점의
-독립 상태라 원문을 지워도 유지되며, 닫고 다시 열면 현재 분석 결과를 사용한다.
+등록 문법에 한정한 규칙 파서다. 임의의 한국어를 이해하지 않으며, 명사 중 가/이로
+끝나는 토큰이나 쉼표·연결 표현을 보수적으로 확인할 수 있다. 복잡한 명사구·부정 범위·
+미등록 활용형은 원문 보존/확인으로 처리한다. 새 단어나 모든 미지원 구문에 대한
+오제안 방지를 보장하지 않는다. P1을 지원하는 척하지 않는다.
 
-반복·기간·숫자 날짜·한글 수사·다중 일정·대화 의도·저장 instant는 지원 밖이다.
-guard는 명시된 표식만 찾는다. `격주`, 표식 없는 `3시간`, 한글 수사, 초 표기 등을
-완전하게 보류하지 못할 수 있으며, 독립적인 `내일`이 있으면 날짜 초안이 가능하다.
-부정·질문·취소도 문법의 날짜·시간을 해석하므로 `내일 약속 취소` 등에 추가 버튼이
-활성화될 수 있다. 사용자 확인·편집 초안까지만 제공하며 입력만으로 저장·취소하지 않는다.
-이 한계를 해결하는 의도 분류나 새 문법은 이번 작업에서 추가하지 않았다.
+context의 IANA 가용성은 실행 환경 Intl에 의존한다. 저장 instant, DST gap/fold,
+자정·종일 확정은 일정 도메인의 후속 책임이다. 초안·대화는 메모리 안에만 있으며
+새로고침하면 사라진다. 서버·DB·계정·사용자 입력 자동 수집·실제 저장은 없다.
+Expo SDK 56/Hermes와 실제 기기의 한글 입력기는 후속 검증이다.
 
-기준 시각은 페이지 진입 시 고정된다. 자정을 지나도 자동 갱신하지 않으므로
-새 기준은 새로고침 또는 개발 정보에서 지정한다. 날짜·시간을 instant로 조합하거나
-DST gap/fold에서 저장 가능한 시각인지 판단하지 않는다. 현지 날짜 계산만 검증했다.
-초안은 메모리 안에 있고 새로고침하면 사라진다. 서버·계정·DB·자동 수집 도구가 없다.
-
-## 다른 사람이 따라 해볼 시나리오
-
-개발 정보에서 기준 시각 `2026-11-14T01:00:00Z`, 시간대 `Asia/Seoul`을 설정하면
-아래 날짜와 동일하게 확인할 수 있다.
-
-1. `다음 주 월요일에` → 2026-11-16. 추가 → 제목·시간이 빈 초안. 제목을 입력하고 닫기.
-2. `내일 오후 3시 회의` → 2026-11-15 / 15:00 / 회의. 추가하여 세 필드를 편집.
-3. 초안이 열린 상태에서 원문을 `모레 18시 운동`으로 수정. 열린 초안은 그대로이고,
-   닫고 다시 추가하면 2026-11-16 / 18:00 / 운동으로 바뀌어야 한다.
-4. `내일 오후 3시 2` → 날짜 유지, 시간 입력 중. 추가한 초안의 시간은 비어 있고
-   미완성 원문 안내가 있어야 한다.
-5. `내일 3시 회의`, `내일 24:00 회의`, `다음 주`, `내일 매주 월요일 회의` → 추가 보류.
-6. 원문을 모두 삭제 → 세 필드 none, 추가 비활성. 이미 열린 초안은 직접 닫을 수 있다.
-7. 추가 버튼에서 Enter, 초안에서 Tab과 Escape. 좁은 화면에서도 입력·편집·닫기 확인.
-8. `내일은 회의 안 해` → 의도를 판단하지 않는 한계를 확인. 실제 저장은 일어나지 않는다.
-
-## 실패 사례 제보 양식
-
-자동으로 전송되는 폼이 아니다. 사용자가 필요한 내용을 복사해 직접 제보한다.
+자동 전송 폼이 아니다. 아래 내용을 복사해 수동으로 제보한다.
 
 ```text
 접속 URL / 확인한 날짜:
-입력 원문(띄어쓰기·줄바꿈·이모지 포함):
-기준 시각(referenceInstant, 개발 정보에서 복사):
-시간대(timeZone, 개발 정보에서 복사):
-기대 결과(날짜/시간/제목/추가 버튼/초안):
-실제 결과(가능하면 전체 파싱 결과 JSON):
-재현 순서(입력·삭제·초안 열기·편집·닫기):
+입력 원문(공백·줄바꿈·이모지 포함):
+해당 메시지의 referenceInstant / timeZone (원문·근거·분석에서 복사):
+기대 결과(후보 수·문구·제목·시간·근사·확인 안내):
+실제 결과와 해당 메시지의 분석 JSON:
+재현 순서(입력·전송·후보 선택·편집·닫기·재선택):
 브라우저/기기/화면 너비/한글 입력기:
 추가 메모:
 ```
 
-실제 사용자 피드백은 아직 0건이다. 배포·공유 후 수동 피드백 검증이 후속 작업이며,
-이번에는 누구에게도 메시지를 보내거나 피드백을 요청하지 않았다.
+실제 사용자 피드백 자료는 제공되지 않았다. 자동 수집 도구나 외부 피드백 요청 메시지를
+추가하지 않았다.

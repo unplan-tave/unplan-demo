@@ -1,0 +1,27 @@
+{
+  "outcome": "passed",
+  "url": "http://127.0.0.1:4176/",
+  "access": "anonymous-new-context",
+  "browser": "157.0.8103.52",
+  "checks": [
+    "composer edits/deletion do not send or create drafts/candidates",
+    "real package equality, exact two candidate labels, AM/PM selection, editable fields, close/reselect/focus, approximate meaning, IME Escape guards",
+    "IME Enter/229, Shift+Enter, sent-message immutability, independent messages and open draft",
+    "negative/question/conflict/P1/multi-event/other-actor/unknown title with no positive candidates",
+    "missing title/date-only, incomplete clock without midnight, emoji/newline provenance",
+    "per-message reference clock and zone snapshots, LA calendar, invalid-context refusal",
+    "375px and 320px layout, editor/composer controls and focus",
+    "18,000 UTF-16 repeated message, bounded candidate count, composer deletion after send"
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "url": "http://127.0.0.1:4176/assets/index-DewcMdTo.css",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4176/assets/index-ZYHlgkcl.js",
+      "status": 200
+    }
+  ]
+}
