@@ -1,0 +1,142 @@
+{
+  "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+  "link": {
+    "type": "github",
+    "org": "unplan-tave",
+    "repo": "unplan-demo",
+    "repoId": 1457822940,
+    "productionBranch": "main"
+  },
+  "buildCommand": "npm run check",
+  "installCommand": "npm ci",
+  "outputDirectory": "dist",
+  "nodeVersion": "22.x",
+  "ssoProtection": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "bypassSecretCount": 0,
+  "deployments": [
+    {
+      "id": "dpl_4pQP3336DbhqUJnxPHFwHzXsHGMM",
+      "url": "https://unplan-demo-2n5a0xwwx-haewonwons-projects.vercel.app",
+      "target": "production",
+      "state": "READY",
+      "source": "git",
+      "commit": "c002e2ad8b84aa801ea27ef787220fe6e3a8b12b",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_EtNwgeoA23EDmB5GzDPpfemEXDs2",
+      "url": "https://unplan-demo-omz1fim4x-haewonwons-projects.vercel.app",
+      "target": null,
+      "state": "READY",
+      "source": "git",
+      "commit": "c002e2ad8b84aa801ea27ef787220fe6e3a8b12b",
+      "branch": "codex/git-auto-deploy",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_DkMaNB1u7VtsnNM4b3BJ4v8mCFGk",
+      "url": "https://unplan-demo-plltf05ir-haewonwons-projects.vercel.app",
+      "target": null,
+      "state": "ERROR",
+      "source": "git",
+      "commit": "304a3c3dc867935ed8e78f42bd12d9ed05cd6687",
+      "branch": "codex/git-auto-deploy",
+      "repo": "unplan-demo",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorMessage": "Command \"npm run check\" exited with 1"
+    },
+    {
+      "id": "dpl_4RrLbm3UPfkh3jQtAPQuNHoC8evw",
+      "url": "https://unplan-demo-gwz8lscto-haewonwons-projects.vercel.app",
+      "target": "production",
+      "state": "READY",
+      "source": "cli",
+      "commit": "bd55a60828cd206766c8165a7ef76b95b238a490",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_3b1AJ1hujbKkGK3d8PzvzcfLsDQZ",
+      "url": "https://unplan-demo-1f22k8jm6-haewonwons-projects.vercel.app",
+      "target": null,
+      "state": "READY",
+      "source": "cli",
+      "commit": "bd55a60828cd206766c8165a7ef76b95b238a490",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_BxCLQanKXmSwt4gKboD2AT36aqub",
+      "url": "https://unplan-demo-a82c4sybz-haewonwons-projects.vercel.app",
+      "target": "production",
+      "state": "READY",
+      "source": "cli",
+      "commit": "bd55a60828cd206766c8165a7ef76b95b238a490",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_4fWtkDV8LkM6QkMSnGNNcwBTvMUg",
+      "url": "https://unplan-demo-a02idulfx-haewonwons-projects.vercel.app",
+      "target": null,
+      "state": "READY",
+      "source": "cli",
+      "commit": "bd55a60828cd206766c8165a7ef76b95b238a490",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_DriaPx2Lta9DSx4EotvBwU1X1DHd",
+      "url": "https://unplan-demo-i5xsocfvo-haewonwons-projects.vercel.app",
+      "target": "production",
+      "state": "READY",
+      "source": "cli",
+      "commit": "bd55a60828cd206766c8165a7ef76b95b238a490",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_66tjNoUMsemapZH6WS8Fnj1pzfzz",
+      "url": "https://unplan-demo-ixu8aa7lf-haewonwons-projects.vercel.app",
+      "target": null,
+      "state": "READY",
+      "source": "cli",
+      "commit": "bd55a60828cd206766c8165a7ef76b95b238a490",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_3MYUDz51TzzttDmaWmLYFH8r9Tfn",
+      "url": "https://unplan-demo-iy841g75j-haewonwons-projects.vercel.app",
+      "target": null,
+      "state": "READY",
+      "source": "cli",
+      "commit": "bd55a60828cd206766c8165a7ef76b95b238a490",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_GR15z3xdyry1LvMDZCQhSGmX2eaN",
+      "url": "https://unplan-demo-a2g5id738-haewonwons-projects.vercel.app",
+      "target": "production",
+      "state": "READY",
+      "source": "cli",
+      "commit": "8763c3a8c3489759ba4e02278a0a485ed0efcfc3",
+      "branch": "main",
+      "repo": "unplan-demo"
+    },
+    {
+      "id": "dpl_9mYsy5tyo1XRD4y7oYe6rs59qhdj",
+      "url": "https://unplan-demo-j6cne4u14-haewonwons-projects.vercel.app",
+      "target": null,
+      "state": "READY",
+      "source": "cli",
+      "commit": "8763c3a8c3489759ba4e02278a0a485ed0efcfc3",
+      "branch": "main",
+      "repo": "unplan-demo"
+    }
+  ]
+}

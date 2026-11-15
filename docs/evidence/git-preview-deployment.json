@@ -1,0 +1,10 @@
+{
+  "id": "dpl_EtNwgeoA23EDmB5GzDPpfemEXDs2",
+  "url": "https://unplan-demo-omz1fim4x-haewonwons-projects.vercel.app",
+  "target": "preview",
+  "state": "READY",
+  "source": "git",
+  "sha": "c002e2ad8b84aa801ea27ef787220fe6e3a8b12b",
+  "branch": "codex/git-auto-deploy",
+  "repo": "unplan-demo"
+}

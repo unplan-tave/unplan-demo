@@ -1,0 +1,12 @@
+{
+  "sha": "c002e2ad8b84aa801ea27ef787220fe6e3a8b12b",
+  "state": "success",
+  "statuses": [
+    {
+      "context": "Vercel",
+      "description": "Deployment has completed",
+      "state": "success",
+      "target_url": "https://vercel.com/haewonwons-projects/unplan-demo/4pQP3336DbhqUJnxPHFwHzXsHGMM"
+    }
+  ]
+}

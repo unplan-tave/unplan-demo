@@ -3,7 +3,26 @@
 2026-11-15 (Asia/Seoul). P0의 실제 파서와 메시지별 후보·편집 초안을 연결했다.
 이전 MVP의 배포 기록은 [이력](releases/2026-11-15-mvp.md)에 보존했다.
 
-## 배포 식별 정보
+## Git 자동 배포 검증 스냅샷
+
+이후 사용자 요청으로 데모 저장소와 포함된 vendor 파서 코드를 공개하고 기존 Vercel
+프로젝트에 GitHub를 연결했다. 파서 원본 저장소는 비공개다. `main` push는 Production,
+다른 브랜치 push는 Preview를 자동 생성한다. Hobby 플랜과 기존 접근 보호·도메인은 유지한다.
+
+| 항목                 | Git 기반 검증 배포                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------- |
+| 검증 커밋            | c002e2ad8b84aa801ea27ef787220fe6e3a8b12b                                                        |
+| Production           | [공유 주소](https://unplan-demo.vercel.app) / dpl_4pQP3336DbhqUJnxPHFwHzXsHGMM                  |
+| Production 고유 주소 | https://unplan-demo-2n5a0xwwx-haewonwons-projects.vercel.app                                    |
+| Preview              | https://unplan-demo-omz1fim4x-haewonwons-projects.vercel.app / dpl_EtNwgeoA23EDmB5GzDPpfemEXDs2 |
+| 배포 출처            | 두 배포 모두 git, GitHub Vercel 상태 success                                                    |
+
+실제 branch/main push로 확인했고 Preview와 인증 없는 새 브라우저의 Production에서
+각 8개 검사 그룹이 통과했다. 공개 자산 해시도 검증한 빌드와 같다. 이후 문서 변경 push도
+새 배포를 만드므로 이 표는 검증 스냅샷이다. 설정·최신 배포 확인 방법과 증거는
+[Git 자동 배포 기록](git-deployment.md)을 따른다.
+
+## 기능 구현 당시 CLI 배포 이력
 
 | 항목                | 값                                                                                   |
 | ------------------- | ------------------------------------------------------------------------------------ |

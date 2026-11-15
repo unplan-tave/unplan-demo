@@ -1,0 +1,34 @@
+{
+  "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+  "teamId": "team_WIRikT3FV5NG9Xu6ol3D96gb",
+  "deployments": [
+    {
+      "id": "dpl_EtNwgeoA23EDmB5GzDPpfemEXDs2",
+      "url": "https://unplan-demo-omz1fim4x-haewonwons-projects.vercel.app",
+      "target": null,
+      "readyState": "READY",
+      "createdAt": 1794704873930,
+      "ready": 1794704953600,
+      "alias": [
+        "unplan-demo-git-codex-git-auto-deploy-haewonwons-projects.vercel.app"
+      ],
+      "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+      "builds": []
+    },
+    {
+      "id": "dpl_4pQP3336DbhqUJnxPHFwHzXsHGMM",
+      "url": "https://unplan-demo-2n5a0xwwx-haewonwons-projects.vercel.app",
+      "target": "production",
+      "readyState": "READY",
+      "createdAt": 1794705054031,
+      "ready": 1794705116445,
+      "alias": [
+        "unplan-demo.vercel.app",
+        "unplan-demo-haewonwons-projects.vercel.app",
+        "unplan-demo-git-main-haewonwons-projects.vercel.app"
+      ],
+      "projectId": "prj_dEaAIakpLUnh6ub6GkBJFrZgeeif",
+      "builds": []
+    }
+  ]
+}
