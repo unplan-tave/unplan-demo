@@ -10,6 +10,8 @@ export interface Draft {
   time: string;
   qualification: 'none' | 'unqualified' | 'approximate';
   unfinishedTime: string;
+  ordering: string | null;
+  dateInherited: boolean;
 }
 
 export function DraftEditor({
@@ -62,6 +64,18 @@ export function DraftEditor({
         <p className="draft-warning">
           입력 중인 시간: {initial.unfinishedTime} · 확정되지 않은 시간은 비워
           두었습니다.
+        </p>
+      )}
+      {initial.ordering && (
+        <p className="draft-warning">
+          {initial.ordering}에 하는 행동이에요. 순서만 정해졌고, 정확한 시간은
+          직접 정해 주세요.
+        </p>
+      )}
+      {initial.dateInherited && (
+        <p className="draft-warning">
+          같은 메시지의 앞 행동에서 날짜를 이어받았어요. 자정을 넘는 계획이면
+          날짜를 수정해 주세요.
         </p>
       )}
       <label htmlFor="draft-title">초안 제목</label>

@@ -37,7 +37,14 @@ function guidance(result: ParseResult | InvalidContextResult) {
   if (result.status === 'invalid-context')
     return '기준 시각과 시간대를 확인해 주세요. 개발 정보에서 수정할 수 있어요.';
   const s = result.suggestions;
-  if (s.decision === 'offer') return '하나를 골라 초안을 편집해 보세요.';
+  if (s.decision === 'offer')
+    return s.groups.length > 1
+      ? '행동별 후보를 골라 초안을 편집해 보세요.'
+      : '하나를 골라 초안을 편집해 보세요.';
+  if (s.reason === 'midnight-date-clarification')
+    return '밤 12시·1시가 어느 날짜인지 확인해 주세요. 원하는 날짜와 오전 시각으로 다시 보내 주세요.';
+  if (s.reason === 'candidate-limit')
+    return '선택할 후보가 많아요. 문장을 나눠서 보내 주세요.';
   if (s.decision === 'review-title')
     return `제목을 확실히 정리하지 못했어요. 이 표현을 편집해서 다시 보내 주세요: ${s.title.value}`;
   if (s.reason === 'negated-action')
@@ -153,6 +160,23 @@ export function App() {
                     className="candidate-list"
                     aria-label="일정 추가 후보"
                   >
+                    {result.suggestions.groups.length > 1 && (
+                      <p className="panel-note">
+                        {group.title.value ?? '제목 입력'}
+                      </p>
+                    )}
+                    {group.temporalRelation && (
+                      <p className="panel-note">
+                        {result.suggestions.groups.find(
+                          (g) =>
+                            g.frameId === group.temporalRelation?.targetFrameId,
+                        )?.title.value ?? '앞 행동'}
+                        {group.temporalRelation.kind === 'before'
+                          ? ' 전'
+                          : ' 후'}{' '}
+                        · 정확한 시간은 직접 정해 주세요.
+                      </p>
+                    )}
                     {group.options.map((option) => (
                       <button
                         key={option.id}
@@ -173,6 +197,14 @@ export function App() {
                               : '',
                             qualification: group.timeQualification,
                             unfinishedTime: group.unfinishedTime ?? '',
+                            ordering: group.temporalRelation
+                              ? `${result.suggestions.groups.find((g) => g.frameId === group.temporalRelation?.targetFrameId)?.title.value ?? '앞 행동'} ${group.temporalRelation.kind === 'before' ? '전' : '후'}`
+                              : null,
+                            dateInherited: option.derivations.some(
+                              (d) =>
+                                d.kind === 'inferred' &&
+                                d.policy === 'same-utterance-date',
+                            ),
                           });
                         }}
                       >
