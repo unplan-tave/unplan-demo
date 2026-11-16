@@ -3,6 +3,7 @@ import { format } from 'prettier';
 import { createHash } from 'node:crypto';
 import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
+import process from 'node:process';
 const manifest = JSON.parse(await readFile('package.json', 'utf8'));
 const lock = JSON.parse(await readFile('package-lock.json', 'utf8'));
 const spec = manifest.dependencies['@unplan-tave/parser'];
@@ -64,7 +65,7 @@ const result = {
   build,
 };
 await writeFile(
-  'docs/evidence/conversation-snapshot.json',
+  process.env.SNAPSHOT_PATH ?? 'docs/evidence/conversation-snapshot.json',
   await format(JSON.stringify(result), { parser: 'json' }),
 );
 console.log(JSON.stringify(result, null, 2));
