@@ -222,6 +222,67 @@ try {
   checks.push(
     'missing title/date-only, incomplete clock without midnight, emoji/newline provenance',
   );
+  const choices = await send('내일이나 모레 3시 카페 갈 거야');
+  await expect(choices.locator('.candidate')).toHaveCount(4);
+  await choices.locator('.candidate').last().click();
+  await expect(draft.getByLabel('초안 날짜')).toHaveValue('2026-11-17');
+  await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue('15:00');
+  await close();
+  const multiText = '내일 오후 세 시 카페 가고 모레 저녁 일곱 시 병원 갈 거야';
+  const multi = await send(multiText);
+  await expect(multi.locator('.candidate')).toHaveCount(2);
+  assert.deepEqual(
+    JSON.parse(await multi.locator('pre').textContent()),
+    parseSchedule({ ...fixed, text: multiText }),
+  );
+  await multi.locator('.candidate').last().click();
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('병원 가기');
+  await expect(draft.getByLabel('초안 날짜')).toHaveValue('2026-11-17');
+  await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue('19:00');
+  await close();
+  checks.push(
+    'P1 four explicit date/time choices and separate actions with Korean/daypart clocks',
+  );
+  const ordered = await send('내일 오후 3시 카페 가기 전에 은행 들를 거야');
+  await expect(ordered).toContainText('카페 가기 전');
+  await ordered.locator('.candidate').last().click();
+  await expect(draft.getByLabel('초안 제목')).toHaveValue('은행 들르기');
+  await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue('');
+  await expect(draft).toContainText('카페 가기 전');
+  await expect(draft).toContainText('날짜를 이어받았어요');
+  await close();
+  checks.push(
+    'P1 ordering and inherited-date notice survive selection without copying an anchor clock',
+  );
+  for (const [text, title, date, time] of [
+    ['30분 뒤 약 먹기', '약 먹기', '2026-11-15', '10:30'],
+    ['2026년 12월 5일 오후 한 시 반 회의', '회의', '2026-12-05', '13:30'],
+    ['내일 카페 말고 도서관 갈 거야', '도서관 가기', '2026-11-16', ''],
+    [
+      '내일 카페에서 책 읽으러 갈 거야',
+      '카페에서 책 읽으러 가기',
+      '2026-11-16',
+      '',
+    ],
+    ['내일 약 사 올 거야', '약 사 오기', '2026-11-16', ''],
+    [
+      '내일 오후 세 시 카페 갈 거야'.normalize('NFD'),
+      '카페 가기',
+      '2026-11-16',
+      '15:00',
+    ],
+  ]) {
+    const message = await send(text);
+    await expect(page.locator('.source-preview')).toHaveText(text);
+    await message.locator('.candidate').first().click();
+    await expect(draft.getByLabel('초안 제목')).toHaveValue(title);
+    await expect(draft.getByLabel('초안 날짜')).toHaveValue(date);
+    await expect(draft.getByLabel('초안 시간 (선택)')).toHaveValue(time);
+    await close();
+  }
+  checks.push(
+    'P1 elapsed time, numeric dates, destination correction, purpose/compound titles and NFD input',
+  );
   await page.locator('.contract-panel > summary').click();
   await page.getByLabel('IANA 시간대').fill('America/Los_Angeles');
   await page.locator('.contract-panel > summary').click();
@@ -248,7 +309,7 @@ try {
   );
   for (const width of [375, 320]) {
     await page.setViewportSize({ width, height: 850 });
-    await first.locator('.candidate').last().click();
+    await ordered.locator('.candidate').last().click();
     await expect(draft.getByLabel('초안 제목')).toBeFocused();
     assert.ok(
       await page.evaluate(
