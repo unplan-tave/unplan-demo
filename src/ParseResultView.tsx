@@ -92,12 +92,13 @@ export function ParseResultView({
                 const parts = [];
                 let end = 0;
                 for (const expression of result.expressions) {
+                  if (expression.span.end <= end) continue;
                   parts.push(
                     result.input.text.slice(end, expression.span.start),
                   );
                   parts.push(
                     <mark
-                      key={expression.span.start}
+                      key={`${expression.kind}:${expression.span.start}:${expression.span.end}`}
                       title={`${expression.kind} · ${expression.state} · [${expression.span.start}, ${expression.span.end})`}
                     >
                       {expression.span.text}
@@ -112,7 +113,9 @@ export function ParseResultView({
             {result.expressions.length ? (
               <ul>
                 {result.expressions.map((expression) => (
-                  <li key={expression.span.start}>
+                  <li
+                    key={`${expression.kind}:${expression.span.start}:${expression.span.end}`}
+                  >
                     {expression.kind} · {expression.state} [
                     {expression.span.start}, {expression.span.end}):{' '}
                     {expression.span.text}
