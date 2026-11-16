@@ -1,0 +1,15 @@
+{
+  "path": "/var/folders/nc/s7y_18vs531g1mf9x3xp0k400000gn/T/unplan-p1-isolated-k8nag84l/demo",
+  "siblingParser": false,
+  "npmCi": "pass",
+  "build": "pass",
+  "packageMatch": true,
+  "outputHashesMatch": true,
+  "version": "0.3.0-alpha.1",
+  "buildHashes": {
+    "assets/index-CLUYobxd.js": "5242dfdea2af2b238ff5793ad3057dc57bf819fdafce31ca45fde2560dd82ff8",
+    "assets/index-DewcMdTo.css": "e889a57e43952c320017af6bb0f5a328e0d1c072b3a5658a37fa49985ea3dcda",
+    "favicon.svg": "964073ddc4cad9e48994324b777e58f2a00a3f6a66294567608d5292192643a6",
+    "index.html": "f579c6c9a9eb013c1366522cd786dbe8e92c230901e005fe2cf57b0b2d4e9e7c"
+  }
+}

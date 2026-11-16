@@ -1,0 +1,82 @@
+{
+  "outcome": "passed",
+  "url": "http://127.0.0.1:5182/",
+  "access": "anonymous-new-context",
+  "browser": "157.0.8103.52",
+  "checks": [
+    "composer edits/deletion do not send or create drafts/candidates",
+    "real package equality, exact two candidate labels, AM/PM selection, editable fields, close/reselect/focus, approximate meaning, IME Escape guards",
+    "IME Enter/229, Shift+Enter, sent-message immutability, independent messages and open draft",
+    "negative/question/conflict/P1/multi-event/other-actor/unknown title with no positive candidates",
+    "missing title/date-only, incomplete clock without midnight, emoji/newline provenance",
+    "P1 four explicit date/time choices and separate actions with Korean/daypart clocks",
+    "P1 ordering and inherited-date notice survive selection without copying an anchor clock",
+    "P1 elapsed time, numeric dates, destination correction, purpose/compound titles and NFD input",
+    "per-message reference clock and zone snapshots, LA calendar, invalid-context refusal",
+    "375px and 320px layout, editor/composer controls and focus",
+    "18,000 UTF-16 repeated message, bounded candidate count, composer deletion after send"
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "url": "http://127.0.0.1:5182/@vite/client",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/src/main.tsx?t=1794841992567",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/node_modules/vite/dist/client/env.mjs",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/@react-refresh",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/node_modules/.vite/deps/react.js?v=08cab09a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/src/App.tsx?t=1794841992567",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/node_modules/.vite/deps/react-DgVJeC5g.js?v=2834f761",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/src/styles.css",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/src/ParseResultView.tsx?t=1794841992567",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/src/DraftAction.tsx",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=08cab09a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/node_modules/.vite/deps/@unplan-tave_parser.js?v=e97531d3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/src/result-format.ts",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/node_modules/.vite/deps/react-dom_client.js?v=4590cf4e",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5182/node_modules/.vite/deps/react-dom-CFuoV50Q.js?v=2834f761",
+      "status": 200
+    }
+  ]
+}
